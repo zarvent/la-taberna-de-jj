@@ -73,7 +73,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                   alt={`Vista principal de ${store.name}`}
                   fill
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  priority
+                  priority // LCP Candidate
                   data-ai-hint="entrada licoreria moderna"
                 />
               </div>
@@ -87,6 +87,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                       fill
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                       data-ai-hint="interior tienda estantes"
+                      loading="lazy"
                     />
                   </div>
                 ))}
@@ -107,6 +108,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                     fill
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     data-ai-hint="detalle producto ambiente"
+                    loading="lazy"
                   />
                 </div>
               ))}
@@ -172,6 +174,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                             fill
                             className="rounded-lg object-contain border bg-card group-hover/img:scale-105 transition-transform duration-300" 
                             data-ai-hint="botella producto primer plano"
+                            loading="lazy"
                           />
                         </div>
                         <div className="flex-grow text-center sm:text-left w-full sm:w-auto">
@@ -182,9 +185,9 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                           <Badge 
                             variant={item.stock > 5 ? "default" : item.stock > 0 ? "secondary" : "destructive"} 
                             className={`px-2 sm:px-2.5 py-1 text-xs shadow-md rounded-md ${
-                              item.stock > 5 ? "bg-green-600/20 text-green-700 border-green-500" : 
-                              item.stock > 0 ? "bg-yellow-500/20 text-yellow-700 border-yellow-500" : 
-                              "bg-red-600/20 text-red-700 border-red-500"
+                              item.stock > 5 ? "bg-green-100 text-green-800 border-green-400" : 
+                              item.stock > 0 ? "bg-yellow-100 text-yellow-800 border-yellow-400" : 
+                              "bg-red-100 text-red-800 border-red-400"
                             }`}
                           >
                             {item.stock > 0 ? <CheckCircle2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" /> : <XCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />}
@@ -221,4 +224,3 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
 
 export const dynamic = 'force-static'; 
 export const revalidate = 3600;
-

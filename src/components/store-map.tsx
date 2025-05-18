@@ -25,7 +25,7 @@ export function StoreMap() {
             height={720} 
             className="object-cover w-full h-full opacity-70"
             data-ai-hint="map bolivia city"
-            priority
+            priority // LCP Candidate if this component is visible on initial load for a specific route/tab
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <p className="text-2xl font-semibold text-foreground/80 bg-background/50 p-4 rounded-lg backdrop-blur-sm">

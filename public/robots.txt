@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+# Disallow: /api/ # Example for API routes you might not want indexed
+# Sitemap: /sitemap.xml # Add this line when you generate a sitemap.xml

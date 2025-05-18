@@ -4,17 +4,30 @@
 import { AppHeader } from "@/components/layout/header";
 import { LocationSelector } from "@/components/location-selector";
 import { BeverageSearch } from "@/components/beverage-search";
-import { StoreMap } from "@/components/store-map";
-import { StoreList } from "@/components/store-list";
+// import { StoreMap } from "@/components/store-map"; // Deferred
+// import { StoreList } from "@/components/store-list"; // Deferred
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PackageSearch, Building, Gift, PartyPopper } from "lucide-react"; 
+import { PackageSearch, Building, Gift, PartyPopper, Loader2 } from "lucide-react"; 
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const RickRollCard = dynamic(() => import('@/components/rickroll-card').then(mod => mod.RickRollCard), {
+  loading: () => <div className="h-[150px] flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>,
+  ssr: false, // Not critical for SSR
+});
+
+const StoreMap = dynamic(() => import('@/components/store-map').then(mod => mod.StoreMap), {
+  loading: () => <div className="h-[300px] flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>,
+});
+
+const StoreList = dynamic(() => import('@/components/store-list').then(mod => mod.StoreList), {
+  loading: () => <div className="h-[300px] flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>,
+});
+
 
 export function MainApplication() {
-  const rickRollUrl = "https://youtu.be/2AxEECOIGAE";
-
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <AppHeader />
@@ -24,33 +37,9 @@ export function MainApplication() {
           <LocationSelector />
         </div>
 
-        {/* Rickroll Card Section */}
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
-          <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/60 hover:border-accent/80 bg-gradient-to-tr from-accent/5 via-card to-card group hover:shadow-3xl transition-all duration-300 hover:scale-[1.01]">
-            <CardHeader className="pb-3 sm:pb-4">
-              <div className="flex items-center">
-                <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent group-hover:animate-icon-pop" />
-                <div>
-                  <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">¡Una Sorpresa de Los Discípulos de JJ para Ti!</CardTitle>
-                  <CardDescription className="text-sm sm:text-base text-muted-foreground pt-1">¿Listo para algo que te alegrará el día? ¡Tenemos una cerveza... de risas esperándote!</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-2 sm:pt-3 pb-4 sm:pb-5 text-center">
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl group/button w-full sm:w-auto"
-              >
-                <Link href={rickRollUrl} target="_blank" rel="noopener noreferrer">
-                  <Gift className="mr-2 h-5 w-5 group-hover/button:animate-icon-pop" />
-                  ¡Reclamar Mi Sorpresa!
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+          <RickRollCard />
         </div>
-        {/* End Rickroll Card Section */}
 
         <Tabs defaultValue="beverages" className="w-full animate-fade-in-up opacity-0" style={{animationDelay: '0.3s'}}>
           <TabsList className="grid w-full grid-cols-2 md:max-w-md mx-auto h-auto p-1.5 border bg-muted shadow-md rounded-xl">
