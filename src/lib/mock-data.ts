@@ -1,3 +1,4 @@
+
 import type { Beverage, Store } from './types';
 
 export const mockBeverages: Beverage[] = [
@@ -51,21 +52,104 @@ export const mockBeverages: Beverage[] = [
     imageUrl: 'https://placehold.co/300x400.png',
     description: 'A hoppy IPA from a local brewery.'
   },
+  {
+    id: 'bev6',
+    name: 'Four Loko Gold',
+    type: 'Other', // Flavored Malt Beverage
+    brand: 'Four Loko',
+    origin: 'USA',
+    price: 4.50,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Popular flavored malt beverage.'
+  },
+  {
+    id: 'bev7',
+    name: 'Coca-Cola Classic',
+    type: 'Other', // Soft Drink
+    brand: 'Coca-Cola',
+    origin: 'Global',
+    price: 1.50,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Classic cola soft drink.'
+  },
+  {
+    id: 'bev8',
+    name: 'Jägermeister',
+    type: 'Other', // Liqueur
+    brand: 'Jägermeister',
+    origin: 'Germany',
+    price: 25.00,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Herbal liqueur from Germany, popular globally.'
+  },
+  {
+    id: 'bev9',
+    name: 'Fernet Branca',
+    type: 'Other', // Amaro/Liqueur
+    brand: 'Branca',
+    origin: 'Italy',
+    price: 20.00,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Italian bitter herbal liqueur, often mixed with cola.'
+  },
+  {
+    id: 'bev10',
+    name: 'Paceña Pilsener',
+    type: 'Beer',
+    brand: 'Paceña',
+    origin: 'Bolivia',
+    price: 2.50,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'A leading brand of beer in Bolivia, crisp and refreshing.'
+  },
+  {
+    id: 'bev11',
+    name: 'Singani Casa Real',
+    type: 'Other', // Brandy/Spirit
+    brand: 'Casa Real',
+    origin: 'Bolivia',
+    price: 15.00,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Bolivian brandy made from Muscat of Alexandria grapes.'
+  },
+  {
+    id: 'bev12',
+    name: 'Huari Tradicional',
+    type: 'Beer',
+    brand: 'Huari',
+    origin: 'Bolivia',
+    price: 2.75,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Premium Bolivian beer with a balanced flavor.'
+  },
+  {
+    id: 'bev13',
+    name: 'Ron Abuelo Añejo',
+    type: 'Other', // Rum
+    brand: 'Ron Abuelo',
+    origin: 'Panama', // Popular imported rum
+    price: 19.50,
+    imageUrl: 'https://placehold.co/300x400.png',
+    description: 'Aged Panamanian rum, smooth and rich.'
+  }
 ];
 
 export const mockStores: Store[] = [
   {
     id: 'store1',
     name: 'Downtown Spirits',
-    address: '123 Main St, Santa Cruz, CA',
+    address: '123 Main St, Santa Cruz, CA', // Keeping generic US address for now
     hours: 'Mon-Sat: 10am-9pm, Sun: 12pm-6pm',
     photos: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png'],
     latitude: 36.9741,
     longitude: -122.0308,
     inventory: [
-      { beverageId: 'bev1', stock: 10 },
-      { beverageId: 'bev2', stock: 5 },
-      { beverageId: 'bev4', stock: 0 },
+      { beverageId: 'bev1', stock: 10 }, // Stolichnaya
+      { beverageId: 'bev2', stock: 5 },  // Baltika
+      { beverageId: 'bev4', stock: 0 },  // Jameson (Out of stock)
+      { beverageId: 'bev9', stock: 7 },  // Fernet Branca
+      { beverageId: 'bev10', stock: 12 }, // Paceña
+      { beverageId: 'bev7', stock: 25 }, // Coca-Cola
     ],
     rating: 4.5,
   },
@@ -78,10 +162,14 @@ export const mockStores: Store[] = [
     latitude: 36.9658,
     longitude: -122.0039,
     inventory: [
-      { beverageId: 'bev1', stock: 3 },
-      { beverageId: 'bev2', stock: 15 },
-      { beverageId: 'bev3', stock: 8 },
-      { beverageId: 'bev5', stock: 12 },
+      { beverageId: 'bev1', stock: 3 },   // Stolichnaya
+      { beverageId: 'bev2', stock: 15 },  // Baltika
+      { beverageId: 'bev3', stock: 8 },   // Kindzmarauli Wine
+      { beverageId: 'bev5', stock: 12 },  // Local Craft IPA
+      { beverageId: 'bev6', stock: 10 },  // Four Loko
+      { beverageId: 'bev7', stock: 20 },  // Coca-Cola
+      { beverageId: 'bev11', stock: 5 }, // Singani
+      { beverageId: 'bev12', stock: 18 }, // Huari
     ],
     rating: 4.2,
   },
@@ -94,9 +182,11 @@ export const mockStores: Store[] = [
     latitude: 36.9700,
     longitude: -122.0470,
     inventory: [
-      { beverageId: 'bev3', stock: 20 },
-      { beverageId: 'bev4', stock: 7 },
-      { beverageId: 'bev5', stock: 2 },
+      { beverageId: 'bev3', stock: 20 },  // Kindzmarauli Wine
+      { beverageId: 'bev4', stock: 7 },   // Jameson
+      { beverageId: 'bev5', stock: 2 },   // Local Craft IPA (Low stock)
+      { beverageId: 'bev8', stock: 6 },   // Jägermeister
+      { beverageId: 'bev13', stock: 9 },  // Ron Abuelo
     ],
     rating: 4.8,
   },
