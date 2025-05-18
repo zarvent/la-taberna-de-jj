@@ -25,7 +25,7 @@ export function StoreCard({ store, className }: StoreCardProps) {
             width={400}
             height={250}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-            data-ai-hint="storefront shop"
+            data-ai-hint="tienda local acogedora"
           />
         </div>
         {store.rating && (
@@ -36,16 +36,16 @@ export function StoreCard({ store, className }: StoreCardProps) {
       </CardHeader>
       <CardContent className="p-3 sm:p-4 flex-grow">
         <CardTitle className="text-base sm:text-lg font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mb-1 sm:mb-1.5 truncate leading-tight" title={store.name}>{store.name}</CardTitle>
-        <CardDescription className="text-xs sm:text-sm text-muted-foreground mb-1 flex items-start line-clamp-2">
-          <MapPin className="h-3.5 w-3.5 mr-1.5 mt-0.5 shrink-0 text-accent group-hover:animate-icon-pop" /> {store.address}
+        <CardDescription className="text-xs sm:text-sm text-muted-foreground mb-1 flex items-start line-clamp-2 group/address">
+          <MapPin className="h-3.5 w-3.5 mr-1.5 mt-0.5 shrink-0 text-accent group-hover/address:animate-icon-pop" /> {store.address}
         </CardDescription>
-        <CardDescription className="text-xs text-muted-foreground/90 flex items-center">
-          <Clock className="h-3 w-3 mr-1.5 shrink-0 text-accent group-hover:animate-icon-pop" /> {store.hours}
+        <CardDescription className="text-xs text-muted-foreground/90 flex items-center group/hours">
+          <Clock className="h-3 w-3 mr-1.5 shrink-0 text-accent group-hover/hours:animate-icon-pop" /> {store.hours}
         </CardDescription>
       </CardContent>
       <CardFooter className="p-3 sm:p-4 border-t bg-card/95 backdrop-blur-sm flex items-center justify-between">
-        <div className="text-xs sm:text-sm text-muted-foreground flex items-center">
-          <ShoppingBag className="h-3.5 w-3.5 mr-1.5 text-primary group-hover:animate-icon-pop" />
+        <div className="text-xs sm:text-sm text-muted-foreground flex items-center group/stock">
+          <ShoppingBag className="h-3.5 w-3.5 mr-1.5 text-primary group-hover/stock:animate-icon-pop" />
           {totalStockItems > 0 ? `${totalStockItems} en stock` : "Consultar"}
         </div>
         <Button 
@@ -62,3 +62,4 @@ export function StoreCard({ store, className }: StoreCardProps) {
     </Card>
   );
 }
+

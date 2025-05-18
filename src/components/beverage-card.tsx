@@ -33,7 +33,7 @@ export function BeverageCard({ beverage, className }: BeverageCardProps) {
             width={400}
             height={300}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-            data-ai-hint="beverage bottle label"
+            data-ai-hint="botella elegante bebida"
           />
         </div>
       </CardHeader>
@@ -65,3 +65,4 @@ export function BeverageCard({ beverage, className }: BeverageCardProps) {
     </Card>
   );
 }
+

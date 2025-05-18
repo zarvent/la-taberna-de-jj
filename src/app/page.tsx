@@ -31,7 +31,7 @@ export default function HomePage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-primary/10 via-background to-muted/20 p-8 text-center">
         <GlassWater className="h-24 w-24 sm:h-32 sm:w-32 text-primary animate-pulse-alt mb-8 drop-shadow-lg" />
         <h1 className="text-3xl sm:text-4xl font-bold text-primary mb-3 tracking-tight">La Taberna de JJ</h1>
-        <p className="text-lg sm:text-xl text-muted-foreground">Un momento, por favor...</p>
+        <p className="text-lg sm:text-xl text-muted-foreground">Un momento, estamos preparando tu experiencia en La Taberna de JJ...</p>
       </div>
     );
   }
@@ -42,8 +42,11 @@ export default function HomePage() {
         <div className="bg-card p-8 sm:p-10 rounded-xl shadow-2xl border border-destructive/30 max-w-md w-full transform transition-all hover:scale-105 duration-300">
           <ShieldAlert className="h-20 w-20 sm:h-24 sm:w-24 text-destructive mx-auto mb-6 animate-icon-pop" />
           <h1 className="text-2xl sm:text-3xl font-bold text-destructive mb-4">Acceso Denegado</h1>
-          <p className="text-base sm:text-lg text-muted-foreground mb-8">
-            Debes ser mayor de 18 años para acceder a La Taberna de JJ.
+          <p className="text-base sm:text-lg text-muted-foreground mb-6">
+            ¡Uy! Para entrar a La Taberna de JJ, necesitas ser mayor de edad. Es por tu seguridad y para cumplir con las normas.
+          </p>
+          <p className="text-sm text-muted-foreground mb-8">
+            ¡Esperamos verte cuando tengas la edad permitida!
           </p>
           <p className="text-xs sm:text-sm text-muted-foreground/80">
             Si crees que esto es un error, por favor borra el almacenamiento local de tu navegador para este sitio e inténtalo de nuevo.
@@ -66,3 +69,4 @@ export default function HomePage() {
     </>
   );
 }
+

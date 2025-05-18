@@ -26,13 +26,13 @@ export function MainApplication() {
 
         {/* Rickroll Card Section */}
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
-          <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/50 bg-gradient-to-tr from-accent/10 via-card to-card/80 group hover:shadow-3xl transition-all duration-300 hover:scale-[1.01]">
+          <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/60 hover:border-accent/80 bg-gradient-to-tr from-accent/5 via-card to-card group hover:shadow-3xl transition-all duration-300 hover:scale-[1.01]">
             <CardHeader className="pb-3 sm:pb-4">
               <div className="flex items-center">
                 <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent group-hover:animate-icon-pop" />
                 <div>
-                  <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">¡Oferta Especial de La Taberna!</CardTitle>
-                  <CardDescription className="text-sm sm:text-base text-muted-foreground pt-1">¿Con sed? ¡Los Discípulos de JJ tienen una sorpresa para ti!</CardDescription>
+                  <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">🎉 ¡Una Sorpresa de Los Discípulos de JJ para Ti! 🎉</CardTitle>
+                  <CardDescription className="text-sm sm:text-base text-muted-foreground pt-1">¿Listo para algo que te alegrará el día? ¡Tenemos una cerveza... de risas esperándote!</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -44,7 +44,7 @@ export function MainApplication() {
               >
                 <Link href={rickRollUrl} target="_blank" rel="noopener noreferrer">
                   <Gift className="mr-2 h-5 w-5 group-hover/button:animate-icon-pop" />
-                  ¡Reclamar Mi Cerveza GRATIS!
+                  ¡Reclamar Mi Sorpresa!
                 </Link>
               </Button>
             </CardContent>
@@ -92,3 +92,4 @@ export function MainApplication() {
     </div>
   );
 }
+

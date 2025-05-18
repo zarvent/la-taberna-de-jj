@@ -74,7 +74,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                   fill
                   className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   priority
-                  data-ai-hint="store interior shelves"
+                  data-ai-hint="entrada licoreria moderna"
                 />
               </div>
               {/* Imágenes Secundarias - Layout de escritorio */}
@@ -86,7 +86,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                       alt={`${store.name} vista ${index + 2}`}
                       fill
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                      data-ai-hint="product detail ambiance"
+                      data-ai-hint="interior tienda estantes"
                     />
                   </div>
                 ))}
@@ -99,14 +99,14 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
             </div>
             {/* Imágenes Secundarias - Layout móvil */}
             <div className="grid grid-cols-2 gap-0.5 bg-border/30 mt-0.5 md:hidden">
-              {store.photos.slice(1, Math.min(store.photos.length, 5)).map((photo, index) => ( 
+              {store.photos.slice(1, Math.min(store.photos.length, 3)).map((photo, index) => ( 
                 <div key={`mobile-gallery-${index}`} className="relative aspect-square group overflow-hidden">
                   <Image
                     src={photo || `https://placehold.co/300x300.png`}
                     alt={`${store.name} vista ${index + 2}`}
                     fill
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                    data-ai-hint="product detail ambiance"
+                    data-ai-hint="detalle producto ambiente"
                   />
                 </div>
               ))}
@@ -171,7 +171,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                             alt={item.beverage.name}
                             fill
                             className="rounded-lg object-contain border bg-card group-hover/img:scale-105 transition-transform duration-300" 
-                            data-ai-hint="bottle shot"
+                            data-ai-hint="botella producto primer plano"
                           />
                         </div>
                         <div className="flex-grow text-center sm:text-left w-full sm:w-auto">
@@ -199,9 +199,9 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                   </div>
                 ) : (
                   <div className="text-center py-10 md:py-12 text-muted-foreground bg-muted/30 rounded-xl border border-border/50 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
-                    <PackageSearch className="mx-auto h-12 w-12 sm:h-14 md:h-16 md:w-16 mb-4 sm:mb-5 text-primary/40" />
-                    <p className="text-base sm:text-lg font-semibold text-foreground mb-1 sm:mb-1.5">Inventario no disponible</p>
-                    <p className="text-xs sm:text-sm mt-1">No hay información específica de bebidas en este momento.</p>
+                    <PackageSearch className="mx-auto h-12 w-12 sm:h-14 md:h-16 md:w-16 mb-4 sm:mb-5 text-primary/40 animate-icon-pop" />
+                    <p className="text-lg sm:text-xl font-semibold text-foreground mb-1 sm:mb-1.5">¡Esta taberna está actualizando su pizarra!</p>
+                    <p className="text-xs sm:text-sm mt-1">Aún no han listado sus bebidas aquí. Te recomendamos contactarles directamente o volver a mirar en un ratito.</p>
                   </div>
                 )}
               </div>
@@ -221,3 +221,4 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
 
 export const dynamic = 'force-static'; 
 export const revalidate = 3600;
+

@@ -31,7 +31,7 @@ export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalP
             Verificación de Edad
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-muted-foreground pt-2 text-base sm:text-lg">
-            ¡Bienvenido a La Taberna de JJ! Para continuar, por favor confirma que eres mayor de 18 años.
+            ¡Bienvenido/a a La Taberna de JJ! Antes de empezar la diversión, ¿nos confirmas que eres mayor de 18 años? ¡Salud!
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 pb-3">
@@ -57,3 +57,4 @@ export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalP
     </AlertDialog>
   );
 }
+

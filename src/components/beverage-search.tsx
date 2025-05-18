@@ -136,12 +136,13 @@ export function BeverageSearch() {
           </ScrollArea>
         ) : (
           <div className="text-center py-12 md:py-16 text-muted-foreground bg-muted/30 rounded-xl border border-border/50 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
-            <PackageX className="mx-auto h-16 w-16 sm:h-20 sm:w-20 mb-5 sm:mb-6 text-primary/40" />
-            <p className="text-lg sm:text-xl font-semibold text-foreground mb-1.5 sm:mb-2">¡Oops! No hay resultados</p>
-            <p className="text-sm sm:text-base mt-1">Intenta ajustar tu búsqueda o filtros para encontrar la bebida perfecta.</p>
+            <PackageX className="mx-auto h-16 w-16 sm:h-20 sm:w-20 mb-5 sm:mb-6 text-primary/40 animate-icon-pop" />
+            <p className="text-lg sm:text-xl font-semibold text-foreground mb-1.5 sm:mb-2">¡Vaya! Parece que tu búsqueda no encontró tesoros esta vez.</p>
+            <p className="text-sm sm:text-base mt-1">¿Qué tal si pruebas con otras palabras o ajustas los filtros? ¡La bebida perfecta te espera!</p>
           </div>
         )}
       </CardContent>
     </Card>
   );
 }
+

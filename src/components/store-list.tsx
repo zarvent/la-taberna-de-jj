@@ -35,12 +35,13 @@ export function StoreList() {
           </ScrollArea>
         ) : (
           <div className="text-center py-12 md:py-16 text-muted-foreground bg-muted/30 rounded-xl border border-border/50 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
-            <SearchX className="mx-auto h-16 w-16 sm:h-20 sm:w-20 mb-5 sm:mb-6 text-primary/40" /> 
-            <p className="text-lg sm:text-xl font-semibold text-foreground mb-1.5 sm:mb-2">No hay tiendas por aquí</p>
-            <p className="text-sm sm:text-base mt-1">Prueba a ampliar tu área de búsqueda o vuelve más tarde.</p>
+            <SearchX className="mx-auto h-16 w-16 sm:h-20 sm:w-20 mb-5 sm:mb-6 text-primary/40 animate-icon-pop" /> 
+            <p className="text-lg sm:text-xl font-semibold text-foreground mb-1.5 sm:mb-2">¡Ups! No hay tiendas por aquí todavía.</p>
+            <p className="text-sm sm:text-base mt-1">Prueba a ampliar tu área de búsqueda o vuelve más tarde. ¡Seguro pronto tendremos opciones!</p>
           </div>
         )}
       </CardContent>
     </Card>
   );
 }
+
