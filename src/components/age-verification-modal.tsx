@@ -3,8 +3,6 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -12,7 +10,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, XCircle } from "lucide-react";
+import { ShieldCheck, ShieldX } from "lucide-react"; // Changed XCircle to ShieldX
 
 interface AgeVerificationModalProps {
   isOpen: boolean;
@@ -24,30 +22,32 @@ export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalP
 
   return (
     <AlertDialog open={isOpen} onOpenChange={() => { /* Controlado por el padre */ }}>
-      <AlertDialogContent className="max-w-md shadow-xl rounded-lg border">
-        <AlertDialogHeader>
-          <div className="flex justify-center mb-4">
-            <ShieldCheck className="h-16 w-16 text-primary" />
+      <AlertDialogContent className="max-w-md shadow-2xl rounded-xl border-border/50 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=open]:duration-500">
+        <AlertDialogHeader className="pt-4">
+          <div className="flex justify-center mb-5">
+            <ShieldCheck className="h-20 w-20 text-primary drop-shadow-lg" />
           </div>
-          <AlertDialogTitle className="text-2xl font-bold text-center text-foreground">
+          <AlertDialogTitle className="text-3xl font-bold text-center text-foreground">
             Verificación de Edad
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center text-muted-foreground pt-2">
+          <AlertDialogDescription className="text-center text-muted-foreground pt-2 text-base">
             ¡Bienvenido a La Taberna de JJ! Para continuar, por favor confirma que eres mayor de 18 años.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
+        <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 pb-2">
           <Button
             variant="outline"
+            size="lg"
             onClick={() => onVerify(false)}
-            className="w-full text-destructive border-destructive hover:bg-destructive/10 hover:text-destructive"
+            className="w-full text-destructive border-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive"
           >
-            <XCircle className="mr-2 h-5 w-5" />
-            No, no soy mayor de 18
+            <ShieldX className="mr-2 h-5 w-5" />
+            No, soy menor
           </Button>
           <Button
+            size="lg"
             onClick={() => onVerify(true)}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground focus-visible:ring-primary"
           >
             <ShieldCheck className="mr-2 h-5 w-5" />
             Sí, soy mayor de 18
