@@ -82,11 +82,32 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        subtleShimmer: {
+          '0%': { backgroundPosition: '-1000px 0' },
+          '100%': { backgroundPosition: '1000px 0' },
+        },
+        iconPop: {
+          '0%, 100%': { transform: 'scale(1) rotate(0deg)' },
+          '50%': { transform: 'scale(1.15) rotate(-5deg)' },
+        },
+        iconTilt: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(-8deg)' },
+          '75%': { transform: 'rotate(5deg)' },
+        }
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+        'subtle-shimmer': 'subtleShimmer 2.5s infinite linear',
+        'icon-pop': 'iconPop 0.5s ease-in-out',
+        'icon-tilt': 'iconTilt 0.4s ease-in-out',
   		}
   	}
   },

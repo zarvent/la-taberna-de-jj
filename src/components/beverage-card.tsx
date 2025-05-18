@@ -7,6 +7,7 @@ import { ShoppingCart, Martini, Beer as BeerIcon, Wine, Package as PackageIcon, 
 
 interface BeverageCardProps {
   beverage: Beverage;
+  className?: string;
 }
 
 const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
@@ -21,9 +22,9 @@ const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
   }
 };
 
-export function BeverageCard({ beverage }: BeverageCardProps) {
+export function BeverageCard({ beverage, className }: BeverageCardProps) {
   return (
-    <Card className="group flex flex-col h-full overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1">
+    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.02] ${className}`}>
       <CardHeader className="p-0 relative">
         <div className="aspect-[4/3] w-full overflow-hidden bg-muted/30">
           <Image
@@ -36,24 +37,24 @@ export function BeverageCard({ beverage }: BeverageCardProps) {
           />
         </div>
       </CardHeader>
-      <CardContent className="p-4 sm:p-5 flex-grow">
-        <div className="flex items-start justify-between mb-2 sm:mb-2.5 min-h-[2.5rem] sm:min-h-[3rem]">
-          <CardTitle className="text-lg sm:text-xl font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mr-2 leading-tight" title={beverage.name}>
+      <CardContent className="p-3 sm:p-4 flex-grow">
+        <div className="flex items-start justify-between mb-1.5 sm:mb-2 min-h-[2.5rem] sm:min-h-[3rem]">
+          <CardTitle className="text-md sm:text-lg font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mr-2 leading-tight" title={beverage.name}>
             {beverage.name} 
           </CardTitle>
           <TypeIcon type={beverage.type} />
         </div>
-        <CardDescription className="text-sm sm:text-base text-muted-foreground mb-1 sm:mb-1.5">{beverage.brand}</CardDescription>
-        <CardDescription className="text-xs sm:text-sm text-muted-foreground/80 h-10 sm:h-12 overflow-hidden line-clamp-2">
+        <CardDescription className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-1.5">{beverage.brand}</CardDescription>
+        <CardDescription className="text-xs text-muted-foreground/80 h-10 overflow-hidden line-clamp-2">
           {beverage.description || "No hay descripción disponible."}
         </CardDescription>
       </CardContent>
-      <CardFooter className="p-4 sm:p-5 border-t bg-card/90 backdrop-blur-sm flex items-center justify-between"> 
-        <div className="flex items-center text-lg sm:text-xl font-bold text-foreground">
+      <CardFooter className="p-3 sm:p-4 border-t bg-card/90 backdrop-blur-sm flex items-center justify-between"> 
+        <div className="flex items-center text-base sm:text-lg font-bold text-foreground">
           {beverage.price.toFixed(2)} <span className="text-xs font-normal text-muted-foreground ml-1">Bs.</span>
         </div>
-        <Button size="default" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-sm sm:text-base px-3 sm:px-4 py-2 h-auto sm:h-10">
-          <ShoppingCart className="mr-1.5 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+        <Button size="sm" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 h-auto sm:h-9 group/button">
+          <ShoppingCart className="mr-1 sm:mr-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover/button:animate-icon-pop" />
           Añadir
         </Button>
       </CardFooter>
