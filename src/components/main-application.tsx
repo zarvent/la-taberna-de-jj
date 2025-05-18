@@ -13,7 +13,7 @@ import { PackageSearch, Building, Gift, PartyPopper } from "lucide-react";
 import Link from "next/link";
 
 export function MainApplication() {
-  const rickRollUrl = "https://youtu.be/dQw4w9WgXcQ"; // Classic Rick Roll link
+  const rickRollUrl = "https://youtu.be/2AxEECOIGAE"; // URL actualizada al video personalizado
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
