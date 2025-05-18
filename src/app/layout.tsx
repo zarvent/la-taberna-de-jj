@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'La Taberna de JJ - Tu Guía de Bebidas',
   description: 'Encuentra tus bebidas favoritas y las tabernas cercanas. Creado por Los Discípulos de JJ.',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
 };
 
 export default function RootLayout({

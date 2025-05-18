@@ -62,33 +62,33 @@ export function BeverageSearch() {
   
   return (
     <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg">
-      <CardHeader className="bg-transparent border-b border-border/50 pb-5">
-        <CardTitle className="flex items-center text-3xl font-bold text-primary">
-          <Search className="mr-3.5 h-8 w-8" />
+      <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
+        <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary">
+          <Search className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8" />
           Búsqueda Inteligente de Bebidas
         </CardTitle>
-        <CardDescription className="text-lg text-muted-foreground pt-1">Encuentra tus bebidas favoritas con filtros avanzados.</CardDescription>
+        <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">Encuentra tus bebidas favoritas con filtros avanzados.</CardDescription>
       </CardHeader>
-      <CardContent className="p-6 md:p-8 space-y-8"> {/* Increased padding and spacing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end"> 
+      <CardContent className="p-5 sm:p-6 md:p-8 space-y-6 md:space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-end"> 
           <div className="lg:col-span-2">
-            <label htmlFor="search-term" className="block text-base font-medium text-muted-foreground mb-2">Buscar por Nombre o Marca</label>
+            <label htmlFor="search-term" className="block text-sm sm:text-base font-medium text-muted-foreground mb-1.5 sm:mb-2">Buscar por Nombre o Marca</label>
             <Input
               id="search-term"
               type="text"
               placeholder="Ej: Stolichnaya, Paceña, Fernet..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full text-lg p-3 rounded-lg" 
+              className="w-full text-base sm:text-lg p-2.5 sm:p-3 rounded-lg" 
             />
           </div>
           <div>
-            <label htmlFor="beverage-type" className="block text-base font-medium text-muted-foreground mb-2">Tipo de Bebida</label>
+            <label htmlFor="beverage-type" className="block text-sm sm:text-base font-medium text-muted-foreground mb-1.5 sm:mb-2">Tipo de Bebida</label>
             <Select 
               value={selectedType} 
               onValueChange={setSelectedType}
             >
-              <SelectTrigger id="beverage-type" className="text-lg p-3 rounded-lg h-auto">
+              <SelectTrigger id="beverage-type" className="w-full text-base sm:text-lg p-2.5 sm:p-3 rounded-lg h-auto">
                 <SelectValue placeholder="Todos los Tipos" />
               </SelectTrigger>
               <SelectContent className="text-base">
@@ -101,11 +101,11 @@ export function BeverageSearch() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 pt-2">
-            <div>
-                <label htmlFor="sort-by" className="block text-base font-medium text-muted-foreground mb-2 sm:inline sm:mr-2">Ordenar por</label>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 pt-1 sm:pt-2">
+            <div className="w-full sm:w-auto">
+                <label htmlFor="sort-by" className="block text-sm sm:text-base font-medium text-muted-foreground mb-1.5 sm:mb-2 sm:inline sm:mr-2">Ordenar por</label>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger id="sort-by" className="w-full sm:w-auto min-w-[200px] text-lg p-3 rounded-lg h-auto">
+                <SelectTrigger id="sort-by" className="w-full sm:min-w-[200px] text-base sm:text-lg p-2.5 sm:p-3 rounded-lg h-auto">
                     <SelectValue placeholder="Ordenar por..." />
                 </SelectTrigger>
                 <SelectContent className="text-base">
@@ -116,24 +116,24 @@ export function BeverageSearch() {
                 </SelectContent>
                 </Select>
             </div>
-            <Button onClick={clearFilters} variant="outline" size="lg" className="w-full sm:w-auto text-destructive border-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive rounded-lg">
+            <Button onClick={clearFilters} variant="outline" size="lg" className="w-full sm:w-auto text-destructive border-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive rounded-lg text-base">
                 <RotateCcw className="mr-2 h-5 w-5" /> Reiniciar Filtros
             </Button>
         </div>
 
         {filteredAndSortedBeverages.length > 0 ? (
-           <ScrollArea className="h-[600px] lg:h-auto lg:max-h-[calc(3*28rem+2*1.5rem)] pr-3 -mr-3"> {/* Adjusted for potentially taller cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8"> {/* Increased gap */}
+           <ScrollArea className="h-[600px] lg:h-auto lg:max-h-[calc(3*28rem+2*1.5rem)] pr-2 sm:pr-3 -mr-2 sm:-mr-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 sm:gap-x-6 gap-y-6 sm:gap-y-8">
               {filteredAndSortedBeverages.map(beverage => (
                 <BeverageCard key={beverage.id} beverage={beverage} />
               ))}
             </div>
           </ScrollArea>
         ) : (
-          <div className="text-center py-16 text-muted-foreground bg-muted/30 rounded-xl border border-border/50">
-            <PackageX className="mx-auto h-24 w-24 mb-8 text-primary/40" /> {/* Changed icon to PackageX */}
-            <p className="text-2xl font-semibold text-foreground mb-2">¡Oops! No hay resultados</p>
-            <p className="text-lg mt-1">Intenta ajustar tu búsqueda o filtros para encontrar la bebida perfecta.</p>
+          <div className="text-center py-12 md:py-16 text-muted-foreground bg-muted/30 rounded-xl border border-border/50">
+            <PackageX className="mx-auto h-20 w-20 sm:h-24 sm:w-24 mb-6 sm:mb-8 text-primary/40" />
+            <p className="text-xl sm:text-2xl font-semibold text-foreground mb-2">¡Oops! No hay resultados</p>
+            <p className="text-base sm:text-lg mt-1">Intenta ajustar tu búsqueda o filtros para encontrar la bebida perfecta.</p>
           </div>
         )}
       </CardContent>

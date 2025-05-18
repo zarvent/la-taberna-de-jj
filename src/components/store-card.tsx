@@ -28,28 +28,28 @@ export function StoreCard({ store }: StoreCardProps) {
           />
         </div>
         {store.rating && (
-            <Badge variant="secondary" className="absolute top-3 right-3 bg-accent text-accent-foreground px-3 py-1.5 rounded-full text-sm font-semibold flex items-center shadow-md border border-accent-foreground/20">
-                <Star className="h-4 w-4 mr-1.5 fill-current" /> {store.rating.toFixed(1)}
+            <Badge variant="secondary" className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-accent text-accent-foreground px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold flex items-center shadow-md border border-accent-foreground/20">
+                <Star className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-1.5 fill-current" /> {store.rating.toFixed(1)}
             </Badge>
         )}
       </CardHeader>
-      <CardContent className="p-5 flex-grow"> {/* Increased padding */}
-        <CardTitle className="text-xl font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mb-2 truncate leading-tight" title={store.name}>{store.name}</CardTitle> {/* Larger title */}
-        <CardDescription className="text-base text-muted-foreground mb-2 flex items-start"> {/* Larger address text */}
-          <MapPin className="h-5 w-5 mr-2 mt-0.5 shrink-0 text-accent" /> {store.address}
+      <CardContent className="p-4 sm:p-5 flex-grow">
+        <CardTitle className="text-lg sm:text-xl font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mb-1.5 sm:mb-2 truncate leading-tight" title={store.name}>{store.name}</CardTitle>
+        <CardDescription className="text-sm sm:text-base text-muted-foreground mb-1.5 sm:mb-2 flex items-start">
+          <MapPin className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2 mt-0.5 shrink-0 text-accent" /> {store.address}
         </CardDescription>
-        <CardDescription className="text-sm text-muted-foreground/90 flex items-center"> {/* Slightly larger hours text */}
-          <Clock className="h-4 w-4 mr-2 shrink-0 text-accent" /> {store.hours}
+        <CardDescription className="text-xs sm:text-sm text-muted-foreground/90 flex items-center">
+          <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 shrink-0 text-accent" /> {store.hours}
         </CardDescription>
       </CardContent>
-      <CardFooter className="p-5 border-t bg-card/90 backdrop-blur-sm flex items-center justify-between">
-        <div className="text-base text-muted-foreground flex items-center"> {/* Larger stock text */}
-          <ShoppingBag className="h-5 w-5 mr-2 text-primary" />
-          {totalStockItems > 0 ? `${totalStockItems} bebidas en stock` : "Consultar stock"}
+      <CardFooter className="p-4 sm:p-5 border-t bg-card/90 backdrop-blur-sm flex items-center justify-between">
+        <div className="text-sm sm:text-base text-muted-foreground flex items-center">
+          <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2 text-primary" />
+          {totalStockItems > 0 ? `${totalStockItems} en stock` : "Consultar"}
         </div>
-        <Button asChild size="default" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <Button asChild size="default" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-sm sm:text-base px-3 sm:px-4 py-2 h-auto sm:h-10">
           <Link href={`/stores/${store.id}`}>
-            Ver Detalles <ExternalLink className="ml-2 h-4 w-4" /> {/* Slightly larger icon & margin */}
+            Ver Detalles <ExternalLink className="ml-1.5 sm:ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </Link>
         </Button>
       </CardFooter>
