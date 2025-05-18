@@ -8,16 +8,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Clock, Star, ShoppingBag, Image as ImageIcon, DollarSign, PackageSearch, CheckCircle2, XCircle, ArrowLeft, BookOpen } from "lucide-react";
+import { MapPin, Clock, Star, ShoppingBag, Image as ImageIcon, PackageSearch, CheckCircle2, XCircle, ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 
 async function getStoreData(id: string): Promise<Store | null> {
+  // Simular carga de datos
   await new Promise(resolve => setTimeout(resolve, 500)); 
   const store = mockStores.find(s => s.id === id);
   return store || null;
 }
 
 async function getBeverageData(id: string): Promise<Beverage | null> {
+  // En una app real, esto vendría de una base de datos.
   const beverage = mockBeverages.find(b => b.id === id);
   return beverage || null;
 }
@@ -26,6 +28,7 @@ interface StorePageParams {
   params: { id: string };
 }
 
+// Generar rutas estáticas para cada tienda
 export async function generateStaticParams() {
   return mockStores.map(store => ({
     id: store.id,
@@ -39,12 +42,13 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
     notFound();
   }
 
+  // Obtener detalles completos de las bebidas en inventario
   const inventoryWithDetails = await Promise.all(
     store.inventory.map(async (item) => {
       const beverageDetails = await getBeverageData(item.beverageId);
       return {
         ...item,
-        beverage: beverageDetails,
+        beverage: beverageDetails, // Esto puede ser Beverage o null si no se encuentra
       };
     })
   );
@@ -61,8 +65,9 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
             </Link>
           </Button>
 
-          <Card className="overflow-hidden shadow-xl rounded-lg border">
+          <Card className="overflow-hidden shadow-xl rounded-lg border border-border/70">
             <CardHeader className="p-0">
+              {/* Galería de Imágenes Principal */}
               <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="relative aspect-[16/10] border-b md:border-b-0 md:border-r border-border">
                   <Image
@@ -86,6 +91,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                       />
                     </div>
                   ))}
+                  {/* Placeholders si no hay suficientes fotos */}
                   {store.photos.length -1 < 2 && Array(2 - Math.max(0, store.photos.length - 1)).fill(0).map((_,i) => (
                      <div key={`placeholder-${i + store.photos.length -1}`} className={`relative aspect-square bg-muted flex items-center justify-center ${ (store.photos.length -1 + i) % 2 === 0 ? 'border-r' : ''} ${ (store.photos.length -1 + i) < 1 ? 'border-b' : ''} border-border`}>
                         <ImageIcon className="h-16 w-16 text-muted-foreground/30" />
@@ -99,7 +105,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                 <CardTitle className="text-4xl font-bold text-primary mb-3 md:mb-0">{store.name}</CardTitle>
                 {store.rating ? (
-                  <Badge variant="secondary" className="text-lg px-4 py-2 bg-accent text-accent-foreground self-start md:self-center shadow-sm">
+                  <Badge variant="secondary" className="text-lg px-4 py-2 bg-accent text-accent-foreground self-start md:self-center shadow-sm border border-accent-foreground/20">
                     <Star className="h-5 w-5 mr-2 fill-current" /> Calificación: {store.rating.toFixed(1)} / 5.0
                   </Badge>
                 ) : (
@@ -109,6 +115,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                 )}
               </div>
 
+              {/* Detalles de Dirección y Horario */}
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-6 mb-8 text-muted-foreground text-base">
                 <div className="flex items-start">
                   <MapPin className="h-6 w-6 mr-3 mt-1 text-accent shrink-0" />
@@ -128,6 +135,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
               
               <Separator className="my-10" />
 
+              {/* Sección de Inventario */}
               <div>
                 <h3 className="text-3xl font-semibold text-foreground mb-8 flex items-center">
                   <ShoppingBag className="h-8 w-8 mr-4 text-primary" />
@@ -135,8 +143,8 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                 </h3>
                 {inventoryWithDetails.filter(item => item.beverage).length > 0 ? (
                   <div className="space-y-6">
-                    {inventoryWithDetails.map(item => item.beverage && (
-                      <Card key={item.beverageId} className="flex flex-col sm:flex-row items-center gap-4 p-4 shadow-md hover:shadow-lg transition-shadow rounded-lg border">
+                    {inventoryWithDetails.map(item => item.beverage && ( // Asegurarse de que beverage exista
+                      <Card key={item.beverageId} className="flex flex-col sm:flex-row items-center gap-4 p-4 shadow-md hover:shadow-lg transition-shadow rounded-lg border border-border/60">
                         <div className="relative w-24 h-24 sm:w-20 sm:h-20 flex-shrink-0">
                           <Image
                             src={item.beverage.imageUrl || `https://placehold.co/100x100.png`}
@@ -163,7 +171,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                             {item.stock > 5 ? 'En Stock' : (item.stock > 0 ? `Poco Stock (${item.stock})` : 'Agotado')}
                           </Badge>
                           <p className="text-xl font-semibold text-foreground flex items-center">
-                            <DollarSign className="h-5 w-5 mr-1 text-accent" />
+                            {/* DollarSign icon removed */}
                             {item.beverage.price.toFixed(2)}
                           </p>
                         </div>
@@ -186,12 +194,12 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
         <div className="container mx-auto px-4 space-y-3">
           <p className="text-base">&copy; {new Date().getFullYear()} La Taberna de JJ. Todos los derechos reservados.</p>
           <p className="text-sm opacity-80">Creado por Los Discípulos de JJ: Sebastian Zambrana, Adrian Rada, Alain Flores.</p>
-          {/* Documentation link removed from here */}
         </div>
       </footer>
     </div>
   );
 }
 
-export const dynamic = 'force-static'; 
-export const revalidate = 3600;
+// Opciones de Next.js para optimización (pueden requerir configuración adicional del servidor/hosting)
+export const dynamic = 'force-static'; // Favorece la generación estática si es posible
+export const revalidate = 3600; // Revalidar la página cada hora (si se usa ISR)
