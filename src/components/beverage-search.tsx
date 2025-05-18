@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -13,6 +14,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const beverageTypes: Beverage['type'][] = ['Vodka', 'Beer', 'Wine', 'Whiskey', 'Other'];
 const origins = Array.from(new Set(mockBeverages.map(b => b.origin))); // Dynamic origins from mock data
+
+const ALL_FILTER_VALUE = "_ALL_"; // Special value for "All" options
 
 export function BeverageSearch() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,12 +85,15 @@ export function BeverageSearch() {
           </div>
           <div>
             <label htmlFor="beverage-type" className="block text-sm font-medium text-muted-foreground mb-1">Type</label>
-            <Select value={selectedType} onValueChange={setSelectedType}>
+            <Select 
+              value={selectedType || ALL_FILTER_VALUE} 
+              onValueChange={(value) => setSelectedType(value === ALL_FILTER_VALUE ? "" : value)}
+            >
               <SelectTrigger id="beverage-type">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value={ALL_FILTER_VALUE}>All Types</SelectItem>
                 {beverageTypes.map(type => (
                   <SelectItem key={type} value={type}>{type}</SelectItem>
                 ))}
@@ -96,12 +102,15 @@ export function BeverageSearch() {
           </div>
           <div>
             <label htmlFor="beverage-origin" className="block text-sm font-medium text-muted-foreground mb-1">Origin</label>
-            <Select value={selectedOrigin} onValueChange={setSelectedOrigin}>
+            <Select 
+              value={selectedOrigin || ALL_FILTER_VALUE} 
+              onValueChange={(value) => setSelectedOrigin(value === ALL_FILTER_VALUE ? "" : value)}
+            >
               <SelectTrigger id="beverage-origin">
                 <SelectValue placeholder="All Origins" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Origins</SelectItem>
+                <SelectItem value={ALL_FILTER_VALUE}>All Origins</SelectItem>
                 {origins.map(origin => (
                   <SelectItem key={origin} value={origin}>{origin}</SelectItem>
                 ))}
