@@ -7,9 +7,14 @@ import { BeverageSearch } from "@/components/beverage-search";
 import { StoreMap } from "@/components/store-map";
 import { StoreList } from "@/components/store-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PackageSearch, Building } from "lucide-react"; 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PackageSearch, Building, Gift, PartyPopper } from "lucide-react"; 
+import Link from "next/link";
 
 export function MainApplication() {
+  const rickRollUrl = "https://youtu.be/dQw4w9WgXcQ"; // Classic Rick Roll link
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <AppHeader />
@@ -18,6 +23,34 @@ export function MainApplication() {
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.1s'}}>
           <LocationSelector />
         </div>
+
+        {/* Rickroll Card Section */}
+        <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
+          <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/50 bg-gradient-to-tr from-accent/5 via-card to-card group hover:shadow-3xl transition-shadow duration-300">
+            <CardHeader className="pb-3 sm:pb-4">
+              <div className="flex items-center">
+                <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent group-hover:animate-icon-pop" />
+                <div>
+                  <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">¡Oferta Especial de La Taberna!</CardTitle>
+                  <CardDescription className="text-sm sm:text-base text-muted-foreground pt-1">¿Con sed? ¡Los Discípulos de JJ tienen una sorpresa para ti!</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-2 sm:pt-3 pb-4 sm:pb-5 text-center">
+              <Button 
+                asChild 
+                size="lg" 
+                className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group/button w-full sm:w-auto"
+              >
+                <Link href={rickRollUrl} target="_blank" rel="noopener noreferrer">
+                  <Gift className="mr-2 h-5 w-5 group-hover/button:animate-icon-pop" />
+                  ¡Reclamar Mi Cerveza GRATIS!
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        {/* End Rickroll Card Section */}
 
         <Tabs defaultValue="beverages" className="w-full animate-fade-in-up opacity-0" style={{animationDelay: '0.3s'}}>
           <TabsList className="grid w-full grid-cols-2 md:max-w-md mx-auto h-auto p-1.5 border bg-muted shadow-md rounded-xl">
