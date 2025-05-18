@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Clock, Star, ShoppingBag, Image as ImageIcon, DollarSign, PackageSearch, CheckCircle2, XCircle, ArrowLeft, MinusCircle } from "lucide-react";
+import { MapPin, Clock, Star, ShoppingBag, Image as ImageIcon, DollarSign, PackageSearch, CheckCircle2, XCircle, ArrowLeft, MinusCircle, BookOpen } from "lucide-react";
 import Link from "next/link";
 
 async function getStoreData(id: string): Promise<Store | null> {
@@ -149,7 +149,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                         <div className="flex-grow text-center sm:text-left">
                           <h4 className="text-xl font-medium text-primary">{item.beverage.name}</h4>
                           <p className="text-base text-muted-foreground">{item.beverage.brand} - {item.beverage.type}</p>
-                          <p className="text-sm text-muted-foreground/80">{item.beverage.origin}</p>
+                          {/* Origin removed from here */}
                         </div>
                         <div className="flex flex-col items-center sm:items-end gap-2 text-center sm:text-right min-w-[140px]">
                           <Badge 
@@ -184,8 +184,15 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
         </div>
       </main>
       <footer className="bg-primary text-primary-foreground/80 py-8 text-center mt-16 border-t border-primary/30">
-        <div className="container mx-auto px-4">
-          <p className="text-base">&copy; {new Date().getFullYear()} Moscow Tavern Finder. Todos los derechos reservados.</p>
+        <div className="container mx-auto px-4 space-y-3">
+          <p className="text-base">&copy; {new Date().getFullYear()} La Taberna de JJ. Todos los derechos reservados.</p>
+          <p className="text-sm opacity-80">Creado por Los Discípulos de JJ: Sebastian Zambrana, Adrian Rada, Alain Flores.</p>
+          <Button variant="link" asChild className="text-accent hover:text-accent/90 p-0 h-auto">
+            <Link href="https://tabernajj.notion.site/" target="_blank" rel="noopener noreferrer">
+              <BookOpen className="mr-2 h-4 w-4" />
+              Ver Documentación
+            </Link>
+          </Button>
         </div>
       </footer>
     </div>

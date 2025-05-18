@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -32,7 +33,7 @@ export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalP
             Verificación de Edad
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-muted-foreground pt-2">
-            ¡Bienvenido a Moscow Tavern Finder! Para continuar, por favor confirma que eres mayor de 18 años.
+            ¡Bienvenido a La Taberna de JJ! Para continuar, por favor confirma que eres mayor de 18 años.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">

@@ -9,26 +9,24 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BeverageCard } from "./beverage-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, ListFilter, X, RotateCcw } from "lucide-react";
+import { Search, ListFilter, RotateCcw } from "lucide-react"; // X icon removed as it's not used
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const ALL_FILTER_VALUE = "_ALL_"; 
 
 export function BeverageSearch() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState<string>("");
-  const [selectedOrigin, setSelectedOrigin] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>(ALL_FILTER_VALUE);
+  // selectedOrigin and origins state removed
   const [sortBy, setSortBy] = useState<string>("name_asc"); 
   
   const [beverageTypes, setBeverageTypes] = useState<Beverage['type'][]>([]);
-  const [origins, setOrigins] = useState<string[]>([]);
+  // origins state removed
 
   useEffect(() => {
-    // Simulate fetching/deriving these from data, ensures dynamic options
     const uniqueTypes = Array.from(new Set(mockBeverages.map(b => b.type))).sort() as Beverage['type'][];
-    const uniqueOrigins = Array.from(new Set(mockBeverages.map(b => b.origin))).sort();
     setBeverageTypes(uniqueTypes);
-    setOrigins(uniqueOrigins);
+    setSelectedType(ALL_FILTER_VALUE); // Ensure default "All" is set after types are loaded
   }, []);
 
 
@@ -41,9 +39,7 @@ export function BeverageSearch() {
     if (selectedType && selectedType !== ALL_FILTER_VALUE) {
       beverages = beverages.filter(beverage => beverage.type === selectedType);
     }
-    if (selectedOrigin && selectedOrigin !== ALL_FILTER_VALUE) {
-      beverages = beverages.filter(beverage => beverage.origin === selectedOrigin);
-    }
+    // Filter by origin removed
 
     switch (sortBy) {
       case 'name_asc':
@@ -61,20 +57,15 @@ export function BeverageSearch() {
     }
 
     return beverages;
-  }, [searchTerm, selectedType, selectedOrigin, sortBy]);
+  }, [searchTerm, selectedType, sortBy]); // selectedOrigin removed from dependencies
 
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedType(ALL_FILTER_VALUE);
-    setSelectedOrigin(ALL_FILTER_VALUE);
+    // setSelectedOrigin(ALL_FILTER_VALUE) removed;
     setSortBy("name_asc");
   };
   
-  useEffect(() => {
-    // Set default "All" on mount after dynamic options are loaded
-    setSelectedType(ALL_FILTER_VALUE);
-    setSelectedOrigin(ALL_FILTER_VALUE);
-  }, [beverageTypes, origins]);
 
   return (
     <Card className="shadow-xl rounded-lg overflow-hidden border">
@@ -86,8 +77,8 @@ export function BeverageSearch() {
         <CardDescription className="text-md">Encuentra tus bebidas favoritas con filtros avanzados.</CardDescription>
       </CardHeader>
       <CardContent className="p-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end"> {/* Adjusted lg:grid-cols-3 */}
+          <div className="lg:col-span-2"> {/* Search input spans 2 cols on lg */}
             <label htmlFor="search-term" className="block text-sm font-medium text-muted-foreground mb-1.5">Buscar por Nombre o Marca</label>
             <Input
               id="search-term"
@@ -115,23 +106,7 @@ export function BeverageSearch() {
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <label htmlFor="beverage-origin" className="block text-sm font-medium text-muted-foreground mb-1.5">Origen</label>
-            <Select 
-              value={selectedOrigin} 
-              onValueChange={setSelectedOrigin}
-            >
-              <SelectTrigger id="beverage-origin" className="text-base">
-                <SelectValue placeholder="Todos los Orígenes" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL_FILTER_VALUE}>Todos los Orígenes</SelectItem>
-                {origins.map(origin => (
-                  <SelectItem key={origin} value={origin}>{origin}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Origin Select removed */}
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">

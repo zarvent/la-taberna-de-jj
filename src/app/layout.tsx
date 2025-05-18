@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Moscow Tavern Finder - Tu Guía de Bebidas',
-  description: 'Encuentra tabernas y tus bebidas favoritas en tu área.',
+  title: 'La Taberna de JJ - Tu Guía de Bebidas',
+  description: 'Encuentra tus bebidas favoritas y las tabernas cercanas. Creado por Los Discípulos de JJ.',
 };
 
 export default function RootLayout({

@@ -4,7 +4,7 @@ import type { Beverage } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DollarSign, ShoppingCart, Star, Martini, Beer as BeerIcon, Wine, Package as PackageIcon, GlassWater } from "lucide-react"; // GlassWater for 'Other'
+import { DollarSign, ShoppingCart, Martini, Beer as BeerIcon, Wine, Package as PackageIcon, GlassWater } from "lucide-react";
 
 interface BeverageCardProps {
   beverage: Beverage;
@@ -16,7 +16,7 @@ const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
     case 'Vodka': return <Martini {...iconProps} aria-label="Vodka" />;
     case 'Beer': return <BeerIcon {...iconProps} aria-label="Cerveza" />;
     case 'Wine': return <Wine {...iconProps} aria-label="Vino" />;
-    case 'Whiskey': return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...iconProps}><path d="M15 3h6v6h-6zM9 3h6v6H9zM9 9h6v6H9zM3 9h6v6H3zM3 3h6v6H3z"/></svg>; // Placeholder for Whiskey glass
+    case 'Whiskey': return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...iconProps}><path d="M15 3h6v6h-6zM9 3h6v6H9zM9 9h6v6H9zM3 9h6v6H3zM3 3h6v6H3zM19 15l-3 6H8l-3-6V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6zM7 12h10" /></svg>; 
     case 'Other': return <GlassWater {...iconProps} aria-label="Otro Tipo de Bebida" />;
     default: return <PackageIcon {...iconProps} aria-label="Bebida" />;
   }
@@ -37,9 +37,7 @@ export function BeverageCard({ beverage }: BeverageCardProps) {
             data-ai-hint="beverage bottle"
           />
         </div>
-        <Badge variant="secondary" className="absolute top-2 right-2 bg-accent text-accent-foreground shadow-sm text-xs px-2 py-0.5">
-          {beverage.origin}
-        </Badge>
+        {/* Origin Badge removed */}
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <div className="flex items-start justify-between mb-2 min-h-[2.5rem]">

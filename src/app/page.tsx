@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -39,7 +40,7 @@ export default function HomePage() {
         <ShieldAlert className="h-24 w-24 text-destructive mb-6" />
         <h1 className="text-3xl font-bold text-foreground mb-4">Acceso Denegado</h1>
         <p className="text-lg text-muted-foreground mb-8">
-          Debes ser mayor de 18 años para acceder a Moscow Tavern Finder.
+          Debes ser mayor de 18 años para acceder a La Taberna de JJ.
         </p>
         <p className="text-sm text-muted-foreground">
           Si crees que esto es un error, por favor borra el almacenamiento local de tu navegador para este sitio e inténtalo de nuevo.

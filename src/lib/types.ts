@@ -1,9 +1,10 @@
+
 export interface Beverage {
   id: string;
   name: string;
   type: 'Vodka' | 'Beer' | 'Wine' | 'Whiskey' | 'Other';
   brand: string;
-  origin: string; // e.g., 'Russia', 'Scotland', 'Local'
+  // origin field removed
   price: number;
   imageUrl?: string;
   description?: string;
