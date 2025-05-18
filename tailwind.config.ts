@@ -99,6 +99,10 @@ export default {
           '0%, 100%': { transform: 'rotate(0deg)' },
           '25%': { transform: 'rotate(-8deg)' },
           '75%': { transform: 'rotate(5deg)' },
+        },
+        pulseAlt: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.7', transform: 'scale(1.05)' },
         }
   		},
   		animation: {
@@ -108,6 +112,7 @@ export default {
         'subtle-shimmer': 'subtleShimmer 2.5s infinite linear',
         'icon-pop': 'iconPop 0.5s ease-in-out',
         'icon-tilt': 'iconTilt 0.4s ease-in-out',
+        'pulse-alt': 'pulseAlt 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
   		}
   	}
   },

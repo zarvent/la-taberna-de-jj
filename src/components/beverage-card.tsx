@@ -24,7 +24,7 @@ const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
 
 export function BeverageCard({ beverage, className }: BeverageCardProps) {
   return (
-    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1 hover:scale-[1.02] ${className}`}>
+    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}>
       <CardHeader className="p-0 relative">
         <div className="aspect-[4/3] w-full overflow-hidden bg-muted/30">
           <Image
@@ -49,11 +49,15 @@ export function BeverageCard({ beverage, className }: BeverageCardProps) {
           {beverage.description || "No hay descripción disponible."}
         </CardDescription>
       </CardContent>
-      <CardFooter className="p-3 sm:p-4 border-t bg-card/90 backdrop-blur-sm flex items-center justify-between"> 
+      <CardFooter className="p-3 sm:p-4 border-t bg-card/95 backdrop-blur-sm flex items-center justify-between"> 
         <div className="flex items-center text-sm sm:text-base font-bold text-foreground">
           {beverage.price.toFixed(2)} <span className="text-xs font-normal text-muted-foreground ml-1">Bs.</span>
         </div>
-        <Button size="sm" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-xs px-2.5 py-1.5 h-8 sm:text-sm sm:px-3 sm:py-2 sm:h-9 group/button">
+        <Button 
+          size="sm" 
+          variant="default" 
+          className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg text-xs px-2.5 py-1.5 h-8 sm:text-sm sm:px-3 sm:py-2 sm:h-9 group/button"
+        >
           <ShoppingCart className="mr-1 sm:mr-1.5 h-3.5 w-3.5 group-hover/button:animate-icon-pop" />
           Añadir
         </Button>

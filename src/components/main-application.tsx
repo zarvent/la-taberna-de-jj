@@ -13,7 +13,7 @@ import { PackageSearch, Building, Gift, PartyPopper } from "lucide-react";
 import Link from "next/link";
 
 export function MainApplication() {
-  const rickRollUrl = "https://youtu.be/2AxEECOIGAE"; // URL actualizada al video personalizado
+  const rickRollUrl = "https://youtu.be/2AxEECOIGAE";
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
@@ -26,7 +26,7 @@ export function MainApplication() {
 
         {/* Rickroll Card Section */}
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
-          <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/50 bg-gradient-to-tr from-accent/5 via-card to-card group hover:shadow-3xl transition-shadow duration-300">
+          <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/50 bg-gradient-to-tr from-accent/10 via-card to-card/80 group hover:shadow-3xl transition-all duration-300 hover:scale-[1.01]">
             <CardHeader className="pb-3 sm:pb-4">
               <div className="flex items-center">
                 <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent group-hover:animate-icon-pop" />
@@ -40,7 +40,7 @@ export function MainApplication() {
               <Button 
                 asChild 
                 size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group/button w-full sm:w-auto"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl group/button w-full sm:w-auto"
               >
                 <Link href={rickRollUrl} target="_blank" rel="noopener noreferrer">
                   <Gift className="mr-2 h-5 w-5 group-hover/button:animate-icon-pop" />
@@ -56,7 +56,7 @@ export function MainApplication() {
           <TabsList className="grid w-full grid-cols-2 md:max-w-md mx-auto h-auto p-1.5 border bg-muted shadow-md rounded-xl">
             <TabsTrigger 
               value="beverages" 
-              className="text-sm sm:text-base py-2.5 sm:py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xl rounded-lg transition-all duration-300 ease-out group"
+              className="text-sm sm:text-base py-2.5 sm:py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xl data-[state=active]:scale-[1.02] data-[state=active]:font-semibold rounded-lg transition-all duration-300 ease-out group"
             >
               <PackageSearch className="mr-2 h-4 w-4 sm:h-5 sm:w-5 group-data-[state=active]:animate-icon-pop" />
               Buscar Bebidas
@@ -64,7 +64,7 @@ export function MainApplication() {
             <TabsTrigger 
               value="stores" 
               id="stores" 
-              className="text-sm sm:text-base py-2.5 sm:py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xl rounded-lg transition-all duration-300 ease-out group"
+              className="text-sm sm:text-base py-2.5 sm:py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xl data-[state=active]:scale-[1.02] data-[state=active]:font-semibold rounded-lg transition-all duration-300 ease-out group"
             >
               <Building className="mr-2 h-4 w-4 sm:h-5 sm:w-5 group-data-[state=active]:animate-icon-pop" />
               Buscar Tiendas
