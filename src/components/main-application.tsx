@@ -46,12 +46,7 @@ export function MainApplication() {
         <div className="container mx-auto px-4 space-y-3">
           <p className="font-medium">&copy; {new Date().getFullYear()} La Taberna de JJ. Todos los derechos reservados.</p>
           <p className="text-sm opacity-80">Creado por Los Discípulos de JJ: Sebastian Zambrana, Adrian Rada, Alain Flores.</p>
-          <Button variant="link" asChild className="text-accent hover:text-accent/90 p-0 h-auto">
-            <Link href="https://tabernajj.notion.site/" target="_blank" rel="noopener noreferrer">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Ver Documentación
-            </Link>
-          </Button>
+          {/* Documentation link removed from here */}
           <p className="text-sm mt-1.5 opacity-80">Por favor, consume con responsabilidad. Debes ser mayor de 18 años para usar este servicio.</p>
         </div>
       </footer>
