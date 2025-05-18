@@ -1,30 +1,27 @@
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Map } from "lucide-react";
+import { MapPinned } from "lucide-react";
 
 export function StoreMap() {
-  // In a real app, this would use a library like @vis.gl/react-google-maps
-  // and display store markers based on mockStores data or API response.
   return (
-    <Card className="shadow-lg rounded-lg overflow-hidden">
-      <CardHeader className="bg-secondary/30">
-        <CardTitle className="flex items-center text-xl font-semibold text-primary">
-          <Map className="mr-3 h-6 w-6" />
-          Store Locator
+    <Card className="shadow-xl rounded-lg overflow-hidden border">
+      <CardHeader className="bg-card border-b">
+        <CardTitle className="flex items-center text-2xl font-semibold text-primary">
+          <MapPinned className="mr-3 h-7 w-7" />
+          Localizador de Tiendas
         </CardTitle>
-        <CardDescription>Find nearby stores. (Map functionality is a placeholder)</CardDescription>
+        <CardDescription className="text-md">Encuentra tiendas cercanas en el mapa. (Funcionalidad de mapa es un marcador de posición)</CardDescription>
       </CardHeader>
       <CardContent className="p-6">
-        <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
+        <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border border-input overflow-hidden">
           <Image 
             src="https://placehold.co/800x450.png" 
-            alt="Store map placeholder" 
+            alt="Marcador de posición del mapa de tiendas" 
             width={800} 
             height={450} 
-            className="object-cover rounded-md"
-            data-ai-hint="map city"
+            className="object-cover w-full h-full"
+            data-ai-hint="map city street"
           />
-          {/* <p className="text-muted-foreground">Map Area: Store markers would appear here.</p> */}
         </div>
       </CardContent>
     </Card>

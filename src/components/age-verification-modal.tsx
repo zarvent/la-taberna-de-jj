@@ -22,34 +22,34 @@ export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalP
   if (!isOpen) return null;
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={() => { /* Controlled by parent */ }}>
-      <AlertDialogContent className="max-w-md shadow-xl rounded-lg">
+    <AlertDialog open={isOpen} onOpenChange={() => { /* Controlado por el padre */ }}>
+      <AlertDialogContent className="max-w-md shadow-xl rounded-lg border">
         <AlertDialogHeader>
           <div className="flex justify-center mb-4">
             <ShieldCheck className="h-16 w-16 text-primary" />
           </div>
           <AlertDialogTitle className="text-2xl font-bold text-center text-foreground">
-            Age Verification
+            Verificación de Edad
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-muted-foreground pt-2">
-            Welcome to Moscow Tavern Finder! To continue, please confirm that you are 18 years of age or older.
+            ¡Bienvenido a Moscow Tavern Finder! Para continuar, por favor confirma que eres mayor de 18 años.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
           <Button
             variant="outline"
             onClick={() => onVerify(false)}
-            className="w-full text-destructive border-destructive hover:bg-destructive/10"
+            className="w-full text-destructive border-destructive hover:bg-destructive/10 hover:text-destructive"
           >
             <XCircle className="mr-2 h-5 w-5" />
-            No, I am not 18+
+            No, no soy mayor de 18
           </Button>
           <Button
             onClick={() => onVerify(true)}
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <ShieldCheck className="mr-2 h-5 w-5" />
-            Yes, I am 18+
+            Sí, soy mayor de 18
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

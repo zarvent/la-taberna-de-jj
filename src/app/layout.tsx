@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Moscow Tavern Finder',
-  description: 'Find taverns and beverages in your area.',
+  title: 'Moscow Tavern Finder - Tu Guía de Bebidas',
+  description: 'Encuentra tabernas y tus bebidas favoritas en tu área.',
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         {children}
         <Toaster />

@@ -6,43 +6,43 @@ import { BeverageSearch } from "@/components/beverage-search";
 import { StoreMap } from "@/components/store-map";
 import { StoreList } from "@/components/store-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PackageSearch, MapPinned } from "lucide-react"; // Icons for tabs
+import { PackageSearch, MapPinned, Building } from "lucide-react";
 
 export function MainApplication() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <AppHeader />
-      <main className="flex-grow container mx-auto px-4 py-8 space-y-8">
+      <main className="flex-grow container mx-auto px-4 py-8 space-y-10">
         
         <LocationSelector />
 
         <Tabs defaultValue="beverages" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:w-1/2 mx-auto bg-primary/10">
-            <TabsTrigger value="beverages" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsList className="grid w-full grid-cols-2 md:max-w-md mx-auto h-14 border bg-muted">
+            <TabsTrigger value="beverages" className="text-base py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-md">
               <PackageSearch className="mr-2 h-5 w-5" />
-              Find Beverages
+              Buscar Bebidas
             </TabsTrigger>
-            <TabsTrigger value="stores" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <MapPinned className="mr-2 h-5 w-5" />
-              Find Stores
+            <TabsTrigger value="stores" id="stores" className="text-base py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-md">
+              <Building className="mr-2 h-5 w-5" />
+              Buscar Tiendas
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="beverages" className="mt-6">
+          <TabsContent value="beverages" className="mt-8 rounded-xl">
             <BeverageSearch />
           </TabsContent>
           
-          <TabsContent value="stores" className="mt-6">
+          <TabsContent value="stores" className="mt-8 space-y-8">
             <StoreMap />
             <StoreList />
           </TabsContent>
         </Tabs>
 
       </main>
-      <footer className="bg-primary text-primary-foreground/80 py-6 text-center">
+      <footer className="bg-primary text-primary-foreground/90 py-8 text-center border-t-2 border-primary/50">
         <div className="container mx-auto px-4">
-          <p>&copy; {new Date().getFullYear()} Moscow Tavern Finder. All rights reserved.</p>
-          <p className="text-sm mt-1">Please drink responsibly. Must be 18+ to use this service.</p>
+          <p className="font-medium">&copy; {new Date().getFullYear()} Moscow Tavern Finder. Todos los derechos reservados.</p>
+          <p className="text-sm mt-1.5 opacity-80">Por favor, consume con responsabilidad. Debes ser mayor de 18 años para usar este servicio.</p>
         </div>
       </footer>
     </div>
