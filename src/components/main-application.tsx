@@ -31,7 +31,7 @@ export function MainApplication() {
               <div className="flex items-center">
                 <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent group-hover:animate-icon-pop" />
                 <div>
-                  <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">🎉 ¡Una Sorpresa de Los Discípulos de JJ para Ti! 🎉</CardTitle>
+                  <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">¡Una Sorpresa de Los Discípulos de JJ para Ti!</CardTitle>
                   <CardDescription className="text-sm sm:text-base text-muted-foreground pt-1">¿Listo para algo que te alegrará el día? ¡Tenemos una cerveza... de risas esperándote!</CardDescription>
                 </div>
               </div>
@@ -92,4 +92,3 @@ export function MainApplication() {
     </div>
   );
 }
-
