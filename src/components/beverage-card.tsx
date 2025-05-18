@@ -24,7 +24,7 @@ const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
 
 export function BeverageCard({ beverage, className }: BeverageCardProps) {
   return (
-    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.02] ${className}`}>
+    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1 hover:scale-[1.02] ${className}`}>
       <CardHeader className="p-0 relative">
         <div className="aspect-[4/3] w-full overflow-hidden bg-muted/30">
           <Image
@@ -38,23 +38,23 @@ export function BeverageCard({ beverage, className }: BeverageCardProps) {
         </div>
       </CardHeader>
       <CardContent className="p-3 sm:p-4 flex-grow">
-        <div className="flex items-start justify-between mb-1.5 sm:mb-2 min-h-[2.5rem] sm:min-h-[3rem]">
-          <CardTitle className="text-md sm:text-lg font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mr-2 leading-tight" title={beverage.name}>
+        <div className="flex items-start justify-between mb-1 sm:mb-1.5 min-h-[2.25rem] sm:min-h-[2.5rem]">
+          <CardTitle className="text-base sm:text-lg font-semibold text-primary group-hover:text-primary/90 transition-colors duration-300 mr-2 leading-tight line-clamp-2" title={beverage.name}>
             {beverage.name} 
           </CardTitle>
           <TypeIcon type={beverage.type} />
         </div>
-        <CardDescription className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-1.5">{beverage.brand}</CardDescription>
+        <CardDescription className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-1.5 line-clamp-1">{beverage.brand}</CardDescription>
         <CardDescription className="text-xs text-muted-foreground/80 h-10 overflow-hidden line-clamp-2">
           {beverage.description || "No hay descripción disponible."}
         </CardDescription>
       </CardContent>
       <CardFooter className="p-3 sm:p-4 border-t bg-card/90 backdrop-blur-sm flex items-center justify-between"> 
-        <div className="flex items-center text-base sm:text-lg font-bold text-foreground">
+        <div className="flex items-center text-sm sm:text-base font-bold text-foreground">
           {beverage.price.toFixed(2)} <span className="text-xs font-normal text-muted-foreground ml-1">Bs.</span>
         </div>
-        <Button size="sm" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 h-auto sm:h-9 group/button">
-          <ShoppingCart className="mr-1 sm:mr-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover/button:animate-icon-pop" />
+        <Button size="sm" variant="default" className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-xs px-2.5 py-1.5 h-8 sm:text-sm sm:px-3 sm:py-2 sm:h-9 group/button">
+          <ShoppingCart className="mr-1 sm:mr-1.5 h-3.5 w-3.5 group-hover/button:animate-icon-pop" />
           Añadir
         </Button>
       </CardFooter>
