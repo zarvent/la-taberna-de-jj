@@ -1,9 +1,10 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // Import React
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { MapPin, CheckCircle, Compass, Loader2, AlertTriangle } from "lucide-react";
+import { Compass, Loader2, CheckCircle } // AlertTriangle removed as it's not used
+from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -26,7 +27,8 @@ if (typeof window !== 'undefined') {
 const SANTA_CRUZ_COORDS: L.LatLngTuple = [-17.7833, -63.1821]; // Coordinates for Santa Cruz de la Sierra
 const INITIAL_ZOOM = 13;
 
-export function LocationSelector() {
+// Define the component logic
+const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
@@ -100,10 +102,10 @@ export function LocationSelector() {
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
         <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group">
-          <MapContainer 
-            center={SANTA_CRUZ_COORDS} 
-            zoom={INITIAL_ZOOM} 
-            scrollWheelZoom={true} 
+          <MapContainer
+            center={SANTA_CRUZ_COORDS}
+            zoom={INITIAL_ZOOM}
+            scrollWheelZoom={true}
             style={{ height: "100%", width: "100%" }}
             className="rounded-lg z-0" // Ensure map is behind potential popups if z-index issues
           >
@@ -121,16 +123,16 @@ export function LocationSelector() {
             <LocationClickHandler />
           </MapContainer>
            <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity">
-              {selectedPosition 
+              {selectedPosition
                 ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
                 : "Haz clic en el mapa para elegir"}
           </div>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row justify-end items-center pt-1 sm:pt-2 gap-3 sm:gap-4">
-          <Button 
-            onClick={handleConfirmLocation} 
-            size="lg" 
+          <Button
+            onClick={handleConfirmLocation}
+            size="lg"
             className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-lg text-base group"
             disabled={!selectedPosition}
           >
@@ -141,4 +143,7 @@ export function LocationSelector() {
       </CardContent>
     </Card>
   );
-}
+};
+
+// Export the memoized component
+export const LocationSelector = React.memo(LocationSelectorComponent);
