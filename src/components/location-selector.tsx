@@ -32,7 +32,9 @@ interface InternalMapProps {
   mapRefSetter: (instance: L.Map | null) => void;
 }
 
-function InternalMapComponent({ currentSelectedPosition, onMapClick, mapRefSetter }: InternalMapProps) {
+// This component now renders the actual map.
+// It's kept separate to better manage its lifecycle with Leaflet.
+const InternalMapComponent = React.memo(function InternalMapComponent({ currentSelectedPosition, onMapClick, mapRefSetter }: InternalMapProps) {
   const LocationClickHandler = () => {
     const map = useMapEvents({
       click(e: L.LeafletMouseEvent) {
@@ -67,7 +69,8 @@ function InternalMapComponent({ currentSelectedPosition, onMapClick, mapRefSette
       <LocationClickHandler />
     </MapContainer>
   );
-}
+});
+InternalMapComponent.displayName = 'InternalMapComponent';
 
 
 const LocationSelectorComponent = () => {
@@ -83,6 +86,7 @@ const LocationSelectorComponent = () => {
 
   useEffect(() => {
     if (isClient) {
+      // Delay rendering MapContainer slightly to avoid HMR issues.
       const timer = setTimeout(() => {
         setRenderMapDelayed(true);
       }, 100); 
@@ -91,13 +95,15 @@ const LocationSelectorComponent = () => {
   }, [isClient]);
 
   useEffect(() => {
+    // This cleanup runs when LocationSelectorComponent unmounts
     return () => {
       if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
+        // console.log('Cleaning up map instance from LocationSelectorComponent');
+        mapRef.current.remove(); // Ensure Leaflet map is destroyed
+        mapRef.current = null;   // Clear the ref
       }
     };
-  }, []);
+  }, []); // Empty dependency array: runs only on mount and unmount
 
   const handleConfirmLocation = () => {
     if (selectedPosition) {
@@ -106,6 +112,7 @@ const LocationSelectorComponent = () => {
         title: "📍 Área de Búsqueda Actualizada",
         description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}.`,
         duration: 4000,
+        className: "bg-primary text-primary-foreground",
       });
     } else {
       toast({
@@ -116,6 +123,10 @@ const LocationSelectorComponent = () => {
       });
     }
   };
+  
+  const mapRefSetter = useCallback((instance: L.Map | null) => {
+    mapRef.current = instance;
+  }, []); // Stable callback
 
   if (!isClient) {
     return (
@@ -152,12 +163,15 @@ const LocationSelectorComponent = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
-        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group">
+        <div
+          key={renderMapDelayed ? 'map-active' : 'map-loading'} // Key to force remount of this div and its children when map is ready
+          className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group"
+        >
           {isClient && renderMapDelayed ? (
             <InternalMapComponent
               currentSelectedPosition={selectedPosition}
               onMapClick={setSelectedPosition}
-              mapRefSetter={(instance) => { mapRef.current = instance; }}
+              mapRefSetter={mapRefSetter}
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center bg-muted/30">
@@ -165,7 +179,7 @@ const LocationSelectorComponent = () => {
             </div>
           )}
            {isClient && renderMapDelayed && (
-               <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10">
+               <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10 pointer-events-none">
                 {selectedPosition
                   ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
                   : "Haz clic en el mapa para elegir"}
@@ -190,4 +204,4 @@ const LocationSelectorComponent = () => {
 };
 
 export const LocationSelector = React.memo(LocationSelectorComponent);
-
+LocationSelector.displayName = 'LocationSelector';
