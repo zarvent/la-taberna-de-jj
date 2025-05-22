@@ -1,32 +1,33 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Building, CheckCircle, Loader2 } from "lucide-react"; 
+import { MapPin, CheckCircle, Compass, Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
-const ZONAS = ["Cualquier Zona", "Zona Norte", "Zona Sur", "Zona Este", "Zona Oeste", "Zona Central"];
-const ANILLOS = [
-  "Cualquier Anillo", 
-  "Primer Anillo", 
-  "Segundo Anillo", 
-  "Tercer Anillo", 
-  "Cuarto Anillo", 
-  "Quinto Anillo", 
-  "Sexto Anillo", 
-  "Séptimo Anillo", 
-  "Octavo Anillo"
-];
+// Leaflet specific imports - ensure these are only used client-side
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
-const DEFAULT_ZONA = ZONAS[0];
-const DEFAULT_ANILLO = ANILLOS[0];
+// Fix Leaflet's default icon path issue with bundlers
+// This ensures marker icons are loaded correctly.
+if (typeof window !== 'undefined') {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  });
+}
+
+const SANTA_CRUZ_COORDS: L.LatLngTuple = [-17.7833, -63.1821]; // Coordinates for Santa Cruz de la Sierra
+const INITIAL_ZOOM = 13;
 
 export function LocationSelector() {
-  const [selectedZona, setSelectedZona] = useState<string>(DEFAULT_ZONA);
-  const [selectedAnillo, setSelectedAnillo] = useState<string>(DEFAULT_ANILLO);
+  const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
 
@@ -35,30 +36,51 @@ export function LocationSelector() {
   }, []);
 
   const handleConfirmLocation = () => {
-    console.log("Preferencia de ubicación confirmada:", { zona: selectedZona, anillo: selectedAnillo });
-    toast({
-      title: "Área de Búsqueda Actualizada",
-      description: `Buscando en: ${selectedZona === DEFAULT_ZONA ? "Todas las Zonas" : selectedZona}, ${selectedAnillo === DEFAULT_ANILLO ? "Todos los Anillos" : selectedAnillo}.`,
-      duration: 3000,
-    });
+    if (selectedPosition) {
+      console.log("Ubicación confirmada por el mapa:", { lat: selectedPosition[0], lng: selectedPosition[1] });
+      toast({
+        title: "📍 Área de Búsqueda Actualizada",
+        description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}.`,
+        duration: 4000,
+      });
+    } else {
+      toast({
+        title: "⚠️ Sin Selección",
+        description: "Por favor, haz clic en el mapa para seleccionar una ubicación.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
+
+  // Component to handle map click events
+  function LocationClickHandler() {
+    const map = useMapEvents({
+      click(e) {
+        setSelectedPosition([e.latlng.lat, e.latlng.lng]);
+        map.flyTo(e.latlng, map.getZoom()); // Optionally fly to the clicked location
+      },
+    });
+    return null; // This component does not render anything itself
+  }
 
   if (!isClient) {
     return (
-      <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg">
+      <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
         <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
           <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary">
-            <MapPin className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8" />
-            Define tu Área de Búsqueda
+            <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 animate-pulse-alt" />
+            Explorador de Zonas
           </CardTitle>
           <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">
-            Ayúdanos a encontrar las mejores opciones para ti en Santa Cruz.
+            Prepara el mapa para encontrar tu próxima aventura...
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
-          <div className="flex items-center justify-center py-8 sm:py-10">
-            <Loader2 className="h-10 w-10 sm:h-12 sm:w-12 text-primary animate-spin" />
-            <p className="ml-3 sm:ml-4 text-base sm:text-lg text-muted-foreground">Cargando opciones...</p>
+        <CardContent className="p-5 sm:p-6 md:p-8">
+          <div className="h-[400px] flex flex-col items-center justify-center bg-muted/50 rounded-lg border border-dashed border-border/70">
+            <Loader2 className="h-12 w-12 sm:h-16 sm:w-16 text-primary animate-spin mb-4" />
+            <p className="text-lg sm:text-xl text-muted-foreground font-medium">Cargando mapa interactivo...</p>
+            <p className="text-sm text-muted-foreground/80">Un momento, por favor.</p>
           </div>
         </CardContent>
       </Card>
@@ -66,71 +88,55 @@ export function LocationSelector() {
   }
 
   return (
-    <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg">
+    <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
       <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
         <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary">
-          <MapPin className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8" />
-          Define tu Área de Búsqueda
+          <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 text-primary group-hover:animate-icon-pop" />
+          Explorador Interactivo de Santa Cruz
         </CardTitle>
         <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">
-          Selecciona tu zona y anillo de preferencia en Santa Cruz de la Sierra.
+          Haz clic en el mapa para seleccionar tu ubicación de interés. ¡Explora y encuentra!
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-5 sm:p-6 md:p-8 space-y-6 md:space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 sm:gap-x-6 gap-y-5 sm:gap-y-6">
-          <div>
-            <label htmlFor="zona-select" className="block text-sm sm:text-base font-medium text-muted-foreground mb-1.5 sm:mb-2">
-              Zona de Preferencia
-            </label>
-            <Select value={selectedZona} onValueChange={setSelectedZona}>
-              <SelectTrigger id="zona-select" className="w-full text-base sm:text-lg p-2.5 sm:p-3 rounded-lg h-auto">
-                <SelectValue placeholder="Selecciona una zona" />
-              </SelectTrigger>
-              <SelectContent className="text-base">
-                {ZONAS.map((zona) => (
-                  <SelectItem key={zona} value={zona}>
-                    {zona}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label htmlFor="anillo-select" className="block text-sm sm:text-base font-medium text-muted-foreground mb-1.5 sm:mb-2">
-              Anillo de Preferencia
-            </label>
-            <Select value={selectedAnillo} onValueChange={setSelectedAnillo}>
-              <SelectTrigger id="anillo-select" className="w-full text-base sm:text-lg p-2.5 sm:p-3 rounded-lg h-auto">
-                <SelectValue placeholder="Selecciona un anillo" />
-              </SelectTrigger>
-              <SelectContent className="text-base">
-                {ANILLOS.map((anillo) => (
-                  <SelectItem key={anillo} value={anillo}>
-                    {anillo}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
+        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group">
+          <MapContainer 
+            center={SANTA_CRUZ_COORDS} 
+            zoom={INITIAL_ZOOM} 
+            scrollWheelZoom={true} 
+            style={{ height: "100%", width: "100%" }}
+            className="rounded-lg z-0" // Ensure map is behind potential popups if z-index issues
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {selectedPosition && (
+              <Marker position={selectedPosition}>
+                <Popup>
+                  Ubicación seleccionada: <br /> Lat: {selectedPosition[0].toFixed(4)}, Lng: {selectedPosition[1].toFixed(4)}
+                </Popup>
+              </Marker>
+            )}
+            <LocationClickHandler />
+          </MapContainer>
+           <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity">
+              {selectedPosition 
+                ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
+                : "Haz clic en el mapa para elegir"}
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row justify-between items-center pt-2 sm:pt-4 gap-4 sm:gap-6">
-            <div className="text-sm sm:text-base text-muted-foreground text-center sm:text-left flex-grow">
-                <p className="flex items-center justify-center sm:justify-start">
-                    <Building className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-2.5 text-primary/90"/>
-                    Mostrando: 
-                    <span className="font-semibold text-foreground ml-1">{selectedZona === DEFAULT_ZONA ? "Todas" : selectedZona}</span>,
-                    <span className="font-semibold text-foreground ml-1">{selectedAnillo === DEFAULT_ANILLO ? "Todos" : selectedAnillo}</span>.
-                </p>
-            </div>
-            <Button 
-              onClick={handleConfirmLocation} 
-              size="lg" 
-              className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg rounded-lg text-base"
-            >
-              <CheckCircle className="mr-2 h-5 w-5" />
-              Confirmar Área
-            </Button>
+        <div className="flex flex-col sm:flex-row justify-end items-center pt-1 sm:pt-2 gap-3 sm:gap-4">
+          <Button 
+            onClick={handleConfirmLocation} 
+            size="lg" 
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-lg text-base group"
+            disabled={!selectedPosition}
+          >
+            <CheckCircle className="mr-2 h-5 w-5 group-hover:animate-icon-pop" />
+            Confirmar Ubicación
+          </Button>
         </div>
       </CardContent>
     </Card>
