@@ -8,10 +8,14 @@ import type L from 'leaflet';
 import { Loader2 } from 'lucide-react';
 
 // Fix Leaflet's default icon path issue with bundlers
+// This needs to run only once on the client.
 if (typeof window !== 'undefined') {
   const LGlobal = require('leaflet');
-  delete (LGlobal.Icon.Default.prototype as any)._getIconUrl;
-  LGlobal.Icon.Default.mergeOptions({
+  // Check if prototype and _getIconUrl exist to prevent errors if already deleted or in different env
+  if (LGlobal.Icon?.Default?.prototype && (LGlobal.Icon.Default.prototype as any)._getIconUrl) {
+    delete (LGlobal.Icon.Default.prototype as any)._getIconUrl;
+  }
+  LGlobal.Icon?.Default?.mergeOptions?.({
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -34,6 +38,7 @@ const LocationClickHandler = ({ onMapClick }: LocationClickHandlerProps) => {
 };
 LocationClickHandler.displayName = 'LocationClickHandler';
 
+
 interface LocationSelectorMapProps {
   center: L.LatLngTuple;
   zoom: number;
@@ -50,34 +55,31 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
   mapPlaceholder,
 }: LocationSelectorMapProps) {
   const mapRef = useRef<L.Map | null>(null);
-  const [mapKey, setMapKey] = useState(0); // Key to force MapContainer remount
 
   useEffect(() => {
-    // This effect's primary role is to manage cleanup.
-    // The mapRef will be populated by the whenCreated callback.
+    // This effect's primary role is to manage cleanup for the Leaflet map instance
+    // when this component unmounts (or during StrictMode's unmount/remount cycle).
     return () => {
-      if (mapRef.current) {
-        // console.log("LocationSelectorMapComponent unmounting, removing map:", mapRef.current);
-        mapRef.current.remove();
-        mapRef.current = null;
-        // console.log("mapRef.current nulled. Incrementing mapKey for next mount.");
-        // Increment key to ensure next MapContainer instance is completely new
-        // This helps with HMR and React StrictMode's double invoke effects
-        setMapKey(prevKey => prevKey + 1);
+      const currentMap = mapRef.current;
+      if (currentMap) {
+        // console.log("LocationSelectorMapComponent unmounting, removing map:", currentMap);
+        currentMap.remove();
+        mapRef.current = null; // Crucial for the guard in whenCreated, especially with Strict Mode
+        // console.log("mapRef.current nulled in cleanup.");
       }
     };
   }, []); // Empty dependency array: runs effect on mount, cleanup on unmount.
 
   return (
     <MapContainer
-      key={mapKey} // Crucial: forces React to create a new instance if key changes
       center={center}
       zoom={zoom}
       scrollWheelZoom={true}
       style={{ height: '100%', width: '100%' }}
       className="rounded-lg z-0"
-      placeholder={mapPlaceholder}
+      placeholder={mapPlaceholder} // Provided by parent, typically a loading spinner
       whenCreated={(mapInstance) => {
+        // This callback is invoked by react-leaflet when the Leaflet map instance is ready.
         // In Strict Mode, this might be called twice if the component re-mounts.
         // The guard ensures we only assign if our ref is currently null.
         if (mapRef.current === null) {
@@ -86,9 +88,8 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
         } else {
           // This case might happen if whenCreated is called again without a proper unmount/cleanup cycle
           // or on an HMR update where the ref wasn't nulled.
-          // If mapInstance is different and old one was not cleaned, this can be an issue.
-          // The key change and cleanup should prevent this.
-          // console.warn("whenCreated called but mapRef.current was not null. Potential issue or HMR reload.", mapRef.current, mapInstance);
+          // The cleanup effect should prevent this by nulling mapRef.current.
+          // console.warn("whenCreated called but mapRef.current was not null. This might happen with HMR or StrictMode if cleanup/re-mount is not perfect.", mapRef.current, mapInstance);
         }
       }}
     >
