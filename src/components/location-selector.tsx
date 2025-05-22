@@ -13,7 +13,6 @@ import 'leaflet/dist/leaflet.css';
 import type L from 'leaflet'; // Import L for type usage
 
 // Fix Leaflet's default icon path issue with bundlers
-// This ensures marker icons are loaded correctly.
 if (typeof window !== 'undefined') {
   const LGlobal = require('leaflet');
   delete (LGlobal.Icon.Default.prototype as any)._getIconUrl;
@@ -24,8 +23,52 @@ if (typeof window !== 'undefined') {
   });
 }
 
-const SANTA_CRUZ_COORDS: L.LatLngTuple = [-17.7833, -63.1821]; // Coordinates for Santa Cruz de la Sierra
+const SANTA_CRUZ_COORDS: L.LatLngTuple = [-17.7833, -63.1821];
 const INITIAL_ZOOM = 13;
+
+interface InternalMapProps {
+  currentSelectedPosition: L.LatLngTuple | null;
+  onMapClick: (latlng: L.LatLngTuple) => void;
+  mapRefSetter: (instance: L.Map | null) => void;
+}
+
+function InternalMapComponent({ currentSelectedPosition, onMapClick, mapRefSetter }: InternalMapProps) {
+  const LocationClickHandler = () => {
+    const map = useMapEvents({
+      click(e: L.LeafletMouseEvent) {
+        const newPos: L.LatLngTuple = [e.latlng.lat, e.latlng.lng];
+        onMapClick(newPos);
+        map.flyTo(e.latlng, map.getZoom());
+      },
+    });
+    return null;
+  };
+
+  return (
+    <MapContainer
+      center={SANTA_CRUZ_COORDS}
+      zoom={INITIAL_ZOOM}
+      scrollWheelZoom={true}
+      style={{ height: "100%", width: "100%" }}
+      className="rounded-lg z-0"
+      whenCreated={mapRefSetter}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {currentSelectedPosition && (
+        <Marker position={currentSelectedPosition}>
+          <Popup>
+            Ubicación seleccionada: <br /> Lat: {currentSelectedPosition[0].toFixed(4)}, Lng: {currentSelectedPosition[1].toFixed(4)}
+          </Popup>
+        </Marker>
+      )}
+      <LocationClickHandler />
+    </MapContainer>
+  );
+}
+
 
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
@@ -42,13 +85,12 @@ const LocationSelectorComponent = () => {
     if (isClient) {
       const timer = setTimeout(() => {
         setRenderMapDelayed(true);
-      }, 100); // Slightly increased delay for stability
+      }, 100); 
       return () => clearTimeout(timer);
     }
   }, [isClient]);
 
   useEffect(() => {
-    // Cleanup map instance on component unmount
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -75,23 +117,13 @@ const LocationSelectorComponent = () => {
     }
   };
 
-  function LocationClickHandler() {
-    const map = useMapEvents({
-      click(e: L.LeafletMouseEvent) {
-        setSelectedPosition([e.latlng.lat, e.latlng.lng]);
-        map.flyTo(e.latlng, map.getZoom());
-      },
-    });
-    return null;
-  }
-
   if (!isClient) {
     return (
       <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
         <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
-          <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary">
-            <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 animate-pulse-alt" />
-            Explorador de Zonas
+          <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary group">
+            <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 text-primary group-hover:animate-icon-pop" />
+            Explorador Interactivo de Santa Cruz
           </CardTitle>
           <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">
             Prepara el mapa para encontrar tu próxima aventura...
@@ -120,40 +152,25 @@ const LocationSelectorComponent = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
-        <div 
-          key={renderMapDelayed ? 'map-active' : 'map-loading-placeholder'} 
-          className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group bg-muted/30 flex items-center justify-center"
-        >
+        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group">
           {isClient && renderMapDelayed ? (
-            <MapContainer
-              center={SANTA_CRUZ_COORDS}
-              zoom={INITIAL_ZOOM}
-              scrollWheelZoom={true}
-              style={{ height: "100%", width: "100%" }}
-              className="rounded-lg z-0"
-              whenCreated={instance => { mapRef.current = instance; }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {selectedPosition && (
-                <Marker position={selectedPosition}>
-                  <Popup>
-                    Ubicación seleccionada: <br /> Lat: {selectedPosition[0].toFixed(4)}, Lng: {selectedPosition[1].toFixed(4)}
-                  </Popup>
-                </Marker>
-              )}
-              <LocationClickHandler />
-            </MapContainer>
+            <InternalMapComponent
+              currentSelectedPosition={selectedPosition}
+              onMapClick={setSelectedPosition}
+              mapRefSetter={(instance) => { mapRef.current = instance; }}
+            />
           ) : (
-            <Loader2 className="h-10 w-10 text-primary animate-spin" />
+            <div className="h-full w-full flex items-center justify-center bg-muted/30">
+              <Loader2 className="h-10 w-10 text-primary animate-spin" />
+            </div>
           )}
-           <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10">
-              {selectedPosition
-                ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
-                : "Haz clic en el mapa para elegir"}
-          </div>
+           {isClient && renderMapDelayed && (
+               <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10">
+                {selectedPosition
+                  ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
+                  : "Haz clic en el mapa para elegir"}
+            </div>
+           )}
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end items-center pt-1 sm:pt-2 gap-3 sm:gap-4">
@@ -173,3 +190,4 @@ const LocationSelectorComponent = () => {
 };
 
 export const LocationSelector = React.memo(LocationSelectorComponent);
+
