@@ -46,6 +46,12 @@ const InternalMapComponent = React.memo(function InternalMapComponent({ currentS
     return null;
   };
 
+  const MapPlaceholder = () => (
+    <div style={{ height: "100%", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0' }}>
+      <Loader2 className="h-10 w-10 text-primary animate-spin" />
+    </div>
+  );
+
   return (
     <MapContainer
       center={SANTA_CRUZ_COORDS}
@@ -54,6 +60,7 @@ const InternalMapComponent = React.memo(function InternalMapComponent({ currentS
       style={{ height: "100%", width: "100%" }}
       className="rounded-lg z-0"
       whenCreated={mapRefSetter}
+      placeholder={<MapPlaceholder />}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
@@ -86,10 +93,10 @@ const LocationSelectorComponent = () => {
 
   useEffect(() => {
     if (isClient) {
-      // Delay rendering MapContainer slightly to avoid HMR issues.
+      // Delay rendering MapContainer slightly to avoid HMR issues / give React time to settle.
       const timer = setTimeout(() => {
         setRenderMapDelayed(true);
-      }, 100); 
+      }, 50); // A very small delay
       return () => clearTimeout(timer);
     }
   }, [isClient]);
@@ -98,7 +105,6 @@ const LocationSelectorComponent = () => {
     // This cleanup runs when LocationSelectorComponent unmounts
     return () => {
       if (mapRef.current) {
-        // console.log('Cleaning up map instance from LocationSelectorComponent');
         mapRef.current.remove(); // Ensure Leaflet map is destroyed
         mapRef.current = null;   // Clear the ref
       }
@@ -164,7 +170,9 @@ const LocationSelectorComponent = () => {
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
         <div
-          key={renderMapDelayed ? 'map-active' : 'map-loading'} // Key to force remount of this div and its children when map is ready
+          // Keying this div ensures that if renderMapDelayed toggles,
+          // its children are completely unmounted and remounted.
+          key={renderMapDelayed ? 'map-active' : 'map-loading'} 
           className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group"
         >
           {isClient && renderMapDelayed ? (
