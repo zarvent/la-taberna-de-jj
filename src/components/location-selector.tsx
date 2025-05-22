@@ -1,23 +1,23 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react"; // Import React and useRef
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Compass, Loader2, CheckCircle }
-from "lucide-react";
+import { Compass, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 // Leaflet specific imports - ensure these are only used client-side
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet'; // Import L for type usage and map instance
+import type L from 'leaflet'; // Import L for type usage
 
 // Fix Leaflet's default icon path issue with bundlers
 // This ensures marker icons are loaded correctly.
 if (typeof window !== 'undefined') {
-  delete (L.Icon.Default.prototype as any)._getIconUrl;
-  L.Icon.Default.mergeOptions({
+  const LGlobal = require('leaflet'); // Use require here to avoid top-level import issues if not careful
+  delete (LGlobal.Icon.Default.prototype as any)._getIconUrl;
+  LGlobal.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -30,23 +30,33 @@ const INITIAL_ZOOM = 13;
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [renderMapDelayed, setRenderMapDelayed] = useState(false); // New state for delayed rendering
   const { toast } = useToast();
-  const mapRef = useRef<L.Map | null>(null); // Ref to store the map instance
+  const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Effect for manual map cleanup
   useEffect(() => {
-    // Cleanup function to remove the map instance if the component unmounts
+    if (isClient) {
+      const timer = setTimeout(() => {
+        setRenderMapDelayed(true);
+      }, 50); // Delay map rendering slightly
+      return () => clearTimeout(timer);
+    } else {
+      setRenderMapDelayed(false); // Reset if isClient becomes false
+    }
+  }, [isClient]);
+
+  useEffect(() => {
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
-        mapRef.current = null; // Clear the ref
+        mapRef.current = null;
       }
     };
-  }, []); // Empty dependency array ensures this runs once on mount and cleanup on unmount
+  }, []);
 
   const handleConfirmLocation = () => {
     if (selectedPosition) {
@@ -66,15 +76,14 @@ const LocationSelectorComponent = () => {
     }
   };
 
-  // Component to handle map click events
   function LocationClickHandler() {
     const map = useMapEvents({
-      click(e) {
+      click(e: L.LeafletMouseEvent) {
         setSelectedPosition([e.latlng.lat, e.latlng.lng]);
-        map.flyTo(e.latlng, map.getZoom()); // Optionally fly to the clicked location
+        map.flyTo(e.latlng, map.getZoom());
       },
     });
-    return null; // This component does not render anything itself
+    return null;
   }
 
   if (!isClient) {
@@ -112,29 +121,33 @@ const LocationSelectorComponent = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
-        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group">
-          <MapContainer
-            center={SANTA_CRUZ_COORDS}
-            zoom={INITIAL_ZOOM}
-            scrollWheelZoom={true}
-            style={{ height: "100%", width: "100%" }}
-            className="rounded-lg z-0"
-            whenCreated={instance => { mapRef.current = instance; }} // Store map instance
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {selectedPosition && (
-              <Marker position={selectedPosition}>
-                <Popup>
-                  Ubicación seleccionada: <br /> Lat: {selectedPosition[0].toFixed(4)}, Lng: {selectedPosition[1].toFixed(4)}
-                </Popup>
-              </Marker>
-            )}
-            <LocationClickHandler />
-          </MapContainer>
-           <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity">
+        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group bg-muted/30 flex items-center justify-center">
+          {isClient && renderMapDelayed ? (
+            <MapContainer
+              center={SANTA_CRUZ_COORDS}
+              zoom={INITIAL_ZOOM}
+              scrollWheelZoom={true}
+              style={{ height: "100%", width: "100%" }}
+              className="rounded-lg z-0"
+              whenCreated={instance => { mapRef.current = instance; }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {selectedPosition && (
+                <Marker position={selectedPosition}>
+                  <Popup>
+                    Ubicación seleccionada: <br /> Lat: {selectedPosition[0].toFixed(4)}, Lng: {selectedPosition[1].toFixed(4)}
+                  </Popup>
+                </Marker>
+              )}
+              <LocationClickHandler />
+            </MapContainer>
+          ) : (
+            <Loader2 className="h-10 w-10 text-primary animate-spin" />
+          )}
+           <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10">
               {selectedPosition
                 ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
                 : "Haz clic en el mapa para elegir"}
@@ -158,3 +171,4 @@ const LocationSelectorComponent = () => {
 };
 
 export const LocationSelector = React.memo(LocationSelectorComponent);
+
