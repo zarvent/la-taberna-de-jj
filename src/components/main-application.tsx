@@ -14,9 +14,9 @@ const LocationSelector = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex flex-col items-center justify-center min-h-[400px] p-6 animate-pulse">
-        <Compass className="h-12 w-12 text-primary mb-4" />
-        <p className="text-lg font-semibold text-primary">Cargando Explorador de Zonas...</p>
+      <div className="flex flex-col items-center justify-center min-h-[480px] animate-fade-in-up p-6 rounded-xl border border-border/30 bg-muted/20">
+        <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
+        <p className="text-lg font-semibold text-muted-foreground">Cargando Explorador de Zonas...</p>
       </div>
     ),
   }

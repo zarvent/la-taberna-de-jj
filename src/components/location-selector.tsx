@@ -15,7 +15,7 @@ import type L from 'leaflet'; // Import L for type usage
 // Fix Leaflet's default icon path issue with bundlers
 // This ensures marker icons are loaded correctly.
 if (typeof window !== 'undefined') {
-  const LGlobal = require('leaflet'); // Use require here to avoid top-level import issues if not careful
+  const LGlobal = require('leaflet');
   delete (LGlobal.Icon.Default.prototype as any)._getIconUrl;
   LGlobal.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -30,7 +30,7 @@ const INITIAL_ZOOM = 13;
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const [renderMapDelayed, setRenderMapDelayed] = useState(false); // New state for delayed rendering
+  const [renderMapDelayed, setRenderMapDelayed] = useState(false);
   const { toast } = useToast();
   const mapRef = useRef<L.Map | null>(null);
 
@@ -42,14 +42,13 @@ const LocationSelectorComponent = () => {
     if (isClient) {
       const timer = setTimeout(() => {
         setRenderMapDelayed(true);
-      }, 50); // Delay map rendering slightly
+      }, 100); // Slightly increased delay for stability
       return () => clearTimeout(timer);
-    } else {
-      setRenderMapDelayed(false); // Reset if isClient becomes false
     }
   }, [isClient]);
 
   useEffect(() => {
+    // Cleanup map instance on component unmount
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -112,7 +111,7 @@ const LocationSelectorComponent = () => {
   return (
     <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
       <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
-        <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary">
+        <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary group">
           <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 text-primary group-hover:animate-icon-pop" />
           Explorador Interactivo de Santa Cruz
         </CardTitle>
@@ -121,7 +120,10 @@ const LocationSelectorComponent = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
-        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group bg-muted/30 flex items-center justify-center">
+        <div 
+          key={renderMapDelayed ? 'map-active' : 'map-loading-placeholder'} 
+          className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group bg-muted/30 flex items-center justify-center"
+        >
           {isClient && renderMapDelayed ? (
             <MapContainer
               center={SANTA_CRUZ_COORDS}
@@ -171,4 +173,3 @@ const LocationSelectorComponent = () => {
 };
 
 export const LocationSelector = React.memo(LocationSelectorComponent);
-
