@@ -1,9 +1,9 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react"; // Import React
+import React, { useState, useEffect, useCallback, useRef } from "react"; // Import React and useRef
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Compass, Loader2, CheckCircle } // AlertTriangle removed as it's not used
+import { Compass, Loader2, CheckCircle }
 from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 // Leaflet specific imports - ensure these are only used client-side
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import L from 'leaflet'; // Import L for type usage and map instance
 
 // Fix Leaflet's default icon path issue with bundlers
 // This ensures marker icons are loaded correctly.
@@ -27,15 +27,26 @@ if (typeof window !== 'undefined') {
 const SANTA_CRUZ_COORDS: L.LatLngTuple = [-17.7833, -63.1821]; // Coordinates for Santa Cruz de la Sierra
 const INITIAL_ZOOM = 13;
 
-// Define the component logic
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
+  const mapRef = useRef<L.Map | null>(null); // Ref to store the map instance
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Effect for manual map cleanup
+  useEffect(() => {
+    // Cleanup function to remove the map instance if the component unmounts
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null; // Clear the ref
+      }
+    };
+  }, []); // Empty dependency array ensures this runs once on mount and cleanup on unmount
 
   const handleConfirmLocation = () => {
     if (selectedPosition) {
@@ -107,7 +118,8 @@ const LocationSelectorComponent = () => {
             zoom={INITIAL_ZOOM}
             scrollWheelZoom={true}
             style={{ height: "100%", width: "100%" }}
-            className="rounded-lg z-0" // Ensure map is behind potential popups if z-index issues
+            className="rounded-lg z-0"
+            whenCreated={instance => { mapRef.current = instance; }} // Store map instance
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
@@ -145,5 +157,4 @@ const LocationSelectorComponent = () => {
   );
 };
 
-// Export the memoized component
 export const LocationSelector = React.memo(LocationSelectorComponent);

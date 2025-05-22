@@ -2,7 +2,6 @@
 "use client";
 
 import { AppHeader } from "@/components/layout/header";
-// import { LocationSelector } from "@/components/location-selector"; // Original static import
 import { BeverageSearch } from "@/components/beverage-search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,13 +12,11 @@ import dynamic from "next/dynamic";
 const LocationSelector = dynamic(
   () => import('@/components/location-selector').then(mod => mod.LocationSelector),
   {
-    ssr: false, 
+    ssr: false,
     loading: () => (
-      // Simplified loading state for the dynamic import
-      <div className="flex flex-col items-center justify-center min-h-[400px] bg-card/80 backdrop-blur-lg shadow-2xl rounded-xl border border-border/70 p-6 animate-pulse">
-        <Compass className="mr-3 sm:mr-3.5 h-10 w-10 sm:h-12 sm:w-12 text-primary mb-4" />
-        <p className="text-xl sm:text-2xl font-semibold text-primary mb-2">Cargando Explorador de Zonas...</p>
-        <p className="text-base text-muted-foreground">Un momento, por favor.</p>
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-6 animate-pulse">
+        <Compass className="h-12 w-12 text-primary mb-4" />
+        <p className="text-lg font-semibold text-primary">Cargando Explorador de Zonas...</p>
       </div>
     ),
   }
@@ -55,8 +52,6 @@ const StoreList = dynamic(() => import('@/components/store-list').then(mod => mo
 
 
 export function MainApplication() {
-  const rickRollUrl = "https://youtu.be/2AxEECOIGAE";
-
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <AppHeader />
@@ -65,7 +60,7 @@ export function MainApplication() {
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.1s'}}>
           <LocationSelector />
         </div>
-        
+
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
           <RickRollCard />
         </div>
