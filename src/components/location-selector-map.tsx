@@ -1,13 +1,14 @@
 
 "use client";
 
-import React, { useEffect, useRef, memo, useState } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, type MapContainerProps } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import type L from 'leaflet';
-import { Loader2 } from 'lucide-react';
+// Ensure lucide-react is imported if used in mapPlaceholder
+// import { Loader2 } from 'lucide-react';
 
-// Fix Leaflet's default icon path issue with bundlers
+// Leaflet's default icon path fix
 // This needs to run only once on the client.
 if (typeof window !== 'undefined') {
   const LGlobal = require('leaflet');
@@ -44,7 +45,7 @@ interface LocationSelectorMapProps {
   zoom: number;
   selectedPosition: L.LatLngTuple | null;
   onMapClick: (latlng: L.LatLngTuple) => void;
-  mapPlaceholder: React.ReactNode;
+  mapPlaceholder: React.ReactNode; // Placeholder to show before map is ready or if it fails
 }
 
 const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent({
@@ -64,7 +65,7 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
       if (currentMap) {
         // console.log("LocationSelectorMapComponent unmounting, removing map:", currentMap);
         currentMap.remove();
-        mapRef.current = null; // Crucial for the guard in whenCreated, especially with Strict Mode
+        mapRef.current = null; // CRITICAL: Nullify the ref after removing the map instance.
         // console.log("mapRef.current nulled in cleanup.");
       }
     };
@@ -76,7 +77,7 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
       zoom={zoom}
       scrollWheelZoom={true}
       style={{ height: '100%', width: '100%' }}
-      className="rounded-lg z-0"
+      className="rounded-lg z-0" // z-0 can sometimes help with stacking context issues if popups are hidden
       placeholder={mapPlaceholder} // Provided by parent, typically a loading spinner
       whenCreated={(mapInstance) => {
         // This callback is invoked by react-leaflet when the Leaflet map instance is ready.
@@ -109,5 +110,5 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
   );
 });
 
-LocationSelectorMapComponent.displayName = 'LocationSelectorMap';
+LocationSelectorMapComponent.displayName = 'LocationSelectorMap'; // For better debugging
 export { LocationSelectorMapComponent as LocationSelectorMap };
