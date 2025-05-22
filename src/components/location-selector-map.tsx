@@ -1,10 +1,11 @@
 
 "use client";
 
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef, memo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, type MapContainerProps } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import type L from 'leaflet';
+import { Loader2 } from 'lucide-react';
 
 // Fix Leaflet's default icon path issue with bundlers
 if (typeof window !== 'undefined') {
@@ -33,7 +34,6 @@ const LocationClickHandler = ({ onMapClick }: LocationClickHandlerProps) => {
 };
 LocationClickHandler.displayName = 'LocationClickHandler';
 
-
 interface LocationSelectorMapProps {
   center: L.LatLngTuple;
   zoom: number;
@@ -42,65 +42,55 @@ interface LocationSelectorMapProps {
   mapPlaceholder: React.ReactNode;
 }
 
-const LocationSelectorMapComponent = ({
+const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent({
   center,
   zoom,
   selectedPosition,
   onMapClick,
   mapPlaceholder,
-}: LocationSelectorMapProps) => {
+}: LocationSelectorMapProps) {
   const mapRef = useRef<L.Map | null>(null);
+  const [mapKey, setMapKey] = useState(0); // Key to force MapContainer remount
 
   useEffect(() => {
-    // Cleanup function for this specific map instance
-    // This effect runs when the component unmounts.
-    // In React Strict Mode (development), components are mounted, unmounted, and then re-mounted
-    // to help catch issues like improper cleanup.
-    const currentMap = mapRef.current; // Capture the current ref value for the cleanup function.
+    // This effect's primary role is to manage cleanup.
+    // The mapRef will be populated by the whenCreated callback.
     return () => {
-      if (currentMap) {
-        // console.log("LocationSelectorMapComponent unmounting, removing its map instance:", currentMap);
-        currentMap.remove(); // Tell Leaflet to destroy the map instance and clean up its DOM.
-        // Crucially, set mapRef.current to null AFTER removing the map.
-        // This ensures that if the component is re-mounted (e.g., by Strict Mode or HMR),
-        // the whenCreated callback will find mapRef.current as null and correctly re-initialize.
-        if (mapRef.current === currentMap) { // Ensure we are nullifying the same instance we are removing
-            mapRef.current = null;
-            // console.log("mapRef.current set to null after removal.");
-        }
+      if (mapRef.current) {
+        // console.log("LocationSelectorMapComponent unmounting, removing map:", mapRef.current);
+        mapRef.current.remove();
+        mapRef.current = null;
+        // console.log("mapRef.current nulled. Incrementing mapKey for next mount.");
+        // Increment key to ensure next MapContainer instance is completely new
+        // This helps with HMR and React StrictMode's double invoke effects
+        setMapKey(prevKey => prevKey + 1);
       }
     };
-  }, []); // Empty dependency array ensures this runs only on mount and unmount.
+  }, []); // Empty dependency array: runs effect on mount, cleanup on unmount.
 
   return (
     <MapContainer
-      whenCreated={(mapInstance) => {
-        // This callback is invoked by react-leaflet when the Leaflet map instance is ready.
-        // In Strict Mode, this might be called twice if the component re-mounts.
-        if (mapRef.current === null) {
-          // Only assign the mapInstance if our ref is currently null (i.e., no active map).
-          // This guard is essential for Strict Mode's double mount behavior.
-          mapRef.current = mapInstance;
-          // console.log("Map instance assigned to LocationSelectorMapComponent's mapRef:", mapInstance);
-        } else {
-          // This case might happen if whenCreated is called again without a proper unmount/cleanup cycle
-          // or on an HMR update where the ref wasn't nulled.
-          // console.warn("whenCreated called but mapRef.current was not null. Potential issue or HMR reload.", mapRef.current, mapInstance);
-          // We typically don't want to reassign if mapRef.current already exists,
-          // as it should be the already initialized map. The cleanup should handle the old one.
-          // However, if mapInstance is different and old one was not cleaned, this can be an issue.
-          // For safety, if a new map instance is created and the ref wasn't null,
-          // it might indicate a problem, but we will prefer the new instance
-          // if it's different from the one in the ref.
-          // However, the primary fix is the cleanup setting mapRef.current to null.
-        }
-      }}
+      key={mapKey} // Crucial: forces React to create a new instance if key changes
       center={center}
       zoom={zoom}
       scrollWheelZoom={true}
       style={{ height: '100%', width: '100%' }}
       className="rounded-lg z-0"
       placeholder={mapPlaceholder}
+      whenCreated={(mapInstance) => {
+        // In Strict Mode, this might be called twice if the component re-mounts.
+        // The guard ensures we only assign if our ref is currently null.
+        if (mapRef.current === null) {
+          mapRef.current = mapInstance;
+          // console.log("Map instance assigned to mapRef:", mapInstance);
+        } else {
+          // This case might happen if whenCreated is called again without a proper unmount/cleanup cycle
+          // or on an HMR update where the ref wasn't nulled.
+          // If mapInstance is different and old one was not cleaned, this can be an issue.
+          // The key change and cleanup should prevent this.
+          // console.warn("whenCreated called but mapRef.current was not null. Potential issue or HMR reload.", mapRef.current, mapInstance);
+        }
+      }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
@@ -116,7 +106,7 @@ const LocationSelectorMapComponent = ({
       <LocationClickHandler onMapClick={onMapClick} />
     </MapContainer>
   );
-};
+});
 
 LocationSelectorMapComponent.displayName = 'LocationSelectorMap';
-export const LocationSelectorMap = memo(LocationSelectorMapComponent);
+export { LocationSelectorMapComponent as LocationSelectorMap };
