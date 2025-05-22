@@ -1,106 +1,25 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Compass, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-
-// Leaflet specific imports - ensure these are only used client-side
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import type L from 'leaflet'; // Import L for type usage
-
-// Fix Leaflet's default icon path issue with bundlers
-if (typeof window !== 'undefined') {
-  const LGlobal = require('leaflet');
-  delete (LGlobal.Icon.Default.prototype as any)._getIconUrl;
-  LGlobal.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  });
-}
+import type L from 'leaflet';
 
 const SANTA_CRUZ_COORDS: L.LatLngTuple = [-17.7833, -63.1821];
 const INITIAL_ZOOM = 13;
 
-interface InternalMapProps {
-  currentSelectedPosition: L.LatLngTuple | null;
-  onMapClick: (latlng: L.LatLngTuple) => void;
-}
-
-const InternalMapComponent = React.memo(function InternalMapComponent({ currentSelectedPosition, onMapClick }: InternalMapProps) {
-  const mapRef = useRef<L.Map | null>(null);
-
-  const LocationClickHandler = () => {
-    const map = useMapEvents({
-      click(e: L.LeafletMouseEvent) {
-        const newPos: L.LatLngTuple = [e.latlng.lat, e.latlng.lng];
-        onMapClick(newPos);
-        map.flyTo(e.latlng, map.getZoom());
-      },
-    });
-    return null;
-  };
-
-  useEffect(() => {
-    // Cleanup function: runs when InternalMapComponent unmounts
-    return () => {
-      if (mapRef.current) {
-        // console.log("InternalMapComponent unmounting, removing map instance:", mapRef.current);
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, []); // Empty dependency array: runs only on mount and unmount of InternalMapComponent
-
-  const MapPlaceholder = () => (
-    <div style={{ height: "100%", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0' }}>
-      <Loader2 className="h-10 w-10 text-primary animate-spin" />
-    </div>
-  );
-  
-  return (
-    <MapContainer
-      center={SANTA_CRUZ_COORDS}
-      zoom={INITIAL_ZOOM}
-      scrollWheelZoom={true}
-      style={{ height: "100%", width: "100%" }}
-      className="rounded-lg z-0"
-      whenCreated={(mapInstance) => {
-        // Only assign if mapRef is currently null to avoid issues.
-        if (mapRef.current === null) {
-            mapRef.current = mapInstance;
-            // console.log("InternalMapComponent: Map instance assigned to local mapRef.");
-        }
-      }}
-      placeholder={<MapPlaceholder />}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {currentSelectedPosition && (
-        <Marker position={currentSelectedPosition}>
-          <Popup>
-            Ubicación seleccionada: <br /> Lat: {currentSelectedPosition[0].toFixed(4)}, Lng: {currentSelectedPosition[1].toFixed(4)}
-          </Popup>
-        </Marker>
-      )}
-      <LocationClickHandler />
-    </MapContainer>
-  );
-});
-InternalMapComponent.displayName = 'InternalMapComponent';
-
+// Dynamically import the new map component
+const LocationSelectorMap = React.lazy(() =>
+  import('./location-selector-map').then(module => ({ default: module.LocationSelectorMap }))
+);
 
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
-  // mapRef is now managed by InternalMapComponent
 
   useEffect(() => {
     setIsClient(true);
@@ -108,13 +27,13 @@ const LocationSelectorComponent = () => {
 
   const handleConfirmLocation = () => {
     if (selectedPosition) {
-      // console.log("Ubicación confirmada por el mapa:", { lat: selectedPosition[0], lng: selectedPosition[1] });
       toast({
         title: "📍 Área de Búsqueda Actualizada",
-        description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}.`,
+        description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}. (Funcionalidad de filtro no implementada)`,
         duration: 4000,
         className: "bg-primary text-primary-foreground",
       });
+      console.log("Ubicación confirmada:", { lat: selectedPosition[0], lng: selectedPosition[1] });
     } else {
       toast({
         title: "⚠️ Sin Selección",
@@ -124,58 +43,45 @@ const LocationSelectorComponent = () => {
       });
     }
   };
-  
+
   const handleMapClick = useCallback((latlng: L.LatLngTuple) => {
     setSelectedPosition(latlng);
   }, []);
 
-  if (!isClient) {
-    return (
-      <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
-        <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
-          <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary group">
-            <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 text-primary group-hover:animate-icon-pop" />
-            Explorador Interactivo de Santa Cruz
-          </CardTitle>
-          <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">
-            Prepara el mapa para encontrar tu próxima aventura...
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-5 sm:p-6 md:p-8">
-          <div className="h-[400px] flex flex-col items-center justify-center bg-muted/50 rounded-lg border border-dashed border-border/70">
-            <Loader2 className="h-12 w-12 sm:h-16 sm:w-16 text-primary animate-spin mb-4" />
-            <p className="text-lg sm:text-xl text-muted-foreground font-medium">Cargando mapa interactivo...</p>
-            <p className="text-sm text-muted-foreground/80">Un momento, por favor.</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
+  const MapLoadingPlaceholder = () => (
+    <div style={{ height: "100%", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0' }} className="rounded-lg">
+      <Loader2 className="h-10 w-10 text-primary animate-spin" />
+      <p className="ml-2 text-muted-foreground">Cargando mapa interactivo...</p>
+    </div>
+  );
 
   return (
     <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
       <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
         <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary group">
           <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 text-primary group-hover:animate-icon-pop" />
-          Explorador Interactivo de Santa Cruz
+          Selecciona tu Área de Interés
         </CardTitle>
         <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">
-          Haz clic en el mapa para seleccionar tu ubicación de interés. ¡Explora y encuentra!
+          Haz clic en el mapa para definir tu zona de búsqueda.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
-        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group">
+        <div className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group bg-muted/30">
           {isClient ? (
-            <InternalMapComponent
-              currentSelectedPosition={selectedPosition}
-              onMapClick={handleMapClick}
-            />
+            <Suspense fallback={<MapLoadingPlaceholder />}>
+              <LocationSelectorMap
+                center={SANTA_CRUZ_COORDS}
+                zoom={INITIAL_ZOOM}
+                selectedPosition={selectedPosition}
+                onMapClick={handleMapClick}
+                mapPlaceholder={<MapLoadingPlaceholder />}
+              />
+            </Suspense>
           ) : (
-            <div className="h-full w-full flex items-center justify-center bg-muted/30">
-              <Loader2 className="h-10 w-10 text-primary animate-spin" />
-            </div>
+            <MapLoadingPlaceholder />
           )}
-           {isClient && ( 
+           {isClient && (
                <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10 pointer-events-none">
                 {selectedPosition
                   ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
@@ -200,5 +106,6 @@ const LocationSelectorComponent = () => {
   );
 };
 
+LocationSelectorComponent.displayName = 'LocationSelector';
+// LocationSelector is dynamically imported by MainApplication, so we memo here.
 export const LocationSelector = React.memo(LocationSelectorComponent);
-LocationSelector.displayName = 'LocationSelector';
