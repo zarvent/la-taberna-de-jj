@@ -13,27 +13,14 @@ import dynamic from "next/dynamic";
 const LocationSelector = dynamic(
   () => import('@/components/location-selector').then(mod => mod.LocationSelector),
   {
-    ssr: false, // Ensure it's client-side only
+    ssr: false, 
     loading: () => (
-      // Consistent loading state with the one inside LocationSelector
-      <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
-        <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
-          <CardTitle className="flex items-center text-2xl sm:text-3xl font-bold text-primary">
-            <Compass className="mr-3 sm:mr-3.5 h-7 w-7 sm:h-8 sm:w-8 animate-pulse-alt" />
-            Explorador de Zonas
-          </CardTitle>
-          <CardDescription className="text-base sm:text-lg text-muted-foreground pt-1">
-            Prepara el mapa para encontrar tu próxima aventura...
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-5 sm:p-6 md:p-8">
-          <div className="h-[400px] flex flex-col items-center justify-center bg-muted/50 rounded-lg border border-dashed border-border/70">
-            <Loader2 className="h-12 w-12 sm:h-16 sm:w-16 text-primary animate-spin mb-4" />
-            <p className="text-lg sm:text-xl text-muted-foreground font-medium">Cargando mapa interactivo...</p>
-            <p className="text-sm text-muted-foreground/80">Un momento, por favor.</p>
-          </div>
-        </CardContent>
-      </Card>
+      // Simplified loading state for the dynamic import
+      <div className="flex flex-col items-center justify-center min-h-[400px] bg-card/80 backdrop-blur-lg shadow-2xl rounded-xl border border-border/70 p-6 animate-pulse">
+        <Compass className="mr-3 sm:mr-3.5 h-10 w-10 sm:h-12 sm:w-12 text-primary mb-4" />
+        <p className="text-xl sm:text-2xl font-semibold text-primary mb-2">Cargando Explorador de Zonas...</p>
+        <p className="text-base text-muted-foreground">Un momento, por favor.</p>
+      </div>
     ),
   }
 );
@@ -68,6 +55,8 @@ const StoreList = dynamic(() => import('@/components/store-list').then(mod => mo
 
 
 export function MainApplication() {
+  const rickRollUrl = "https://youtu.be/2AxEECOIGAE";
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <AppHeader />
@@ -76,10 +65,11 @@ export function MainApplication() {
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.1s'}}>
           <LocationSelector />
         </div>
-
+        
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
           <RickRollCard />
         </div>
+
 
         <Tabs defaultValue="beverages" className="w-full animate-fade-in-up opacity-0" style={{animationDelay: '0.3s'}}>
           <TabsList className="grid w-full grid-cols-2 md:max-w-md mx-auto h-auto p-1.5 border bg-muted shadow-md rounded-xl">
