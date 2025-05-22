@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -32,8 +31,6 @@ interface InternalMapProps {
   mapRefSetter: (instance: L.Map | null) => void;
 }
 
-// This component now renders the actual map.
-// It's kept separate to better manage its lifecycle with Leaflet.
 const InternalMapComponent = React.memo(function InternalMapComponent({ currentSelectedPosition, onMapClick, mapRefSetter }: InternalMapProps) {
   const LocationClickHandler = () => {
     const map = useMapEvents({
@@ -46,12 +43,13 @@ const InternalMapComponent = React.memo(function InternalMapComponent({ currentS
     return null;
   };
 
+  // This placeholder is for react-leaflet, rendered by MapContainer before Leaflet map is ready.
   const MapPlaceholder = () => (
     <div style={{ height: "100%", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0' }}>
       <Loader2 className="h-10 w-10 text-primary animate-spin" />
     </div>
   );
-
+  
   return (
     <MapContainer
       center={SANTA_CRUZ_COORDS}
@@ -83,7 +81,6 @@ InternalMapComponent.displayName = 'InternalMapComponent';
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const [renderMapDelayed, setRenderMapDelayed] = useState(false);
   const { toast } = useToast();
   const mapRef = useRef<L.Map | null>(null);
 
@@ -92,28 +89,19 @@ const LocationSelectorComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (isClient) {
-      // Delay rendering MapContainer slightly to avoid HMR issues / give React time to settle.
-      const timer = setTimeout(() => {
-        setRenderMapDelayed(true);
-      }, 50); // A very small delay
-      return () => clearTimeout(timer);
-    }
-  }, [isClient]);
-
-  useEffect(() => {
     // This cleanup runs when LocationSelectorComponent unmounts
     return () => {
       if (mapRef.current) {
+        // console.log("LocationSelectorComponent unmounting, removing map instance:", mapRef.current);
         mapRef.current.remove(); // Ensure Leaflet map is destroyed
         mapRef.current = null;   // Clear the ref
       }
     };
-  }, []); // Empty dependency array: runs only on mount and unmount
+  }, []); // Empty dependency array: runs only on mount and unmount of LocationSelectorComponent
 
   const handleConfirmLocation = () => {
     if (selectedPosition) {
-      console.log("Ubicación confirmada por el mapa:", { lat: selectedPosition[0], lng: selectedPosition[1] });
+      // console.log("Ubicación confirmada por el mapa:", { lat: selectedPosition[0], lng: selectedPosition[1] });
       toast({
         title: "📍 Área de Búsqueda Actualizada",
         description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}.`,
@@ -131,9 +119,24 @@ const LocationSelectorComponent = () => {
   };
   
   const mapRefSetter = useCallback((instance: L.Map | null) => {
-    mapRef.current = instance;
+    // Only set mapRef.current if it's not already set and instance is valid.
+    // This can help prevent issues if whenCreated is somehow called multiple times.
+    if (instance && !mapRef.current) {
+      mapRef.current = instance;
+      // console.log("Map instance assigned to mapRef via mapRefSetter.");
+    }
+    // If instance is null (e.g. map destroyed by react-leaflet itself),
+    // and mapRef.current was pointing to it, it should be nulled.
+    // However, our main cleanup does mapRef.current = null, so this might be redundant
+    // unless react-leaflet calls whenCreated with null on its own cleanup.
+    else if (!instance && mapRef.current && mapRef.current === instance ) { // Check if it's the same instance being nulled
+       // console.log("Map instance (passed as null to mapRefSetter) matched mapRef.current. Nulling mapRef.");
+       // mapRef.current = null; // The main cleanup handles this robustly on component unmount.
+    }
   }, []); // Stable callback
 
+  // This is the initial loading state for the whole LocationSelector card,
+  // before the client-side logic (and thus the map) can run.
   if (!isClient) {
     return (
       <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
@@ -157,6 +160,7 @@ const LocationSelectorComponent = () => {
     );
   }
 
+  // isClient is true, now we can attempt to render client-side components
   return (
     <Card className="shadow-2xl rounded-xl overflow-hidden border border-border/70 bg-card/80 backdrop-blur-lg animate-fade-in-up">
       <CardHeader className="bg-transparent border-b border-border/50 pb-4 sm:pb-5">
@@ -170,23 +174,23 @@ const LocationSelectorComponent = () => {
       </CardHeader>
       <CardContent className="p-3 sm:p-4 md:p-5 space-y-5 sm:space-y-6">
         <div
-          // Keying this div ensures that if renderMapDelayed toggles,
-          // its children are completely unmounted and remounted.
-          key={renderMapDelayed ? 'map-active' : 'map-loading'} 
           className="h-[350px] sm:h-[400px] md:h-[450px] w-full rounded-lg overflow-hidden border border-border shadow-inner relative group"
         >
-          {isClient && renderMapDelayed ? (
+          {/* Render InternalMapComponent only when isClient is true */}
+          {isClient ? (
             <InternalMapComponent
               currentSelectedPosition={selectedPosition}
               onMapClick={setSelectedPosition}
               mapRefSetter={mapRefSetter}
             />
           ) : (
+            // This loader is technically redundant if parent loader for isClient covers it,
+            // but harmless as it won't be reached if isClient is false due to the outer check.
             <div className="h-full w-full flex items-center justify-center bg-muted/30">
               <Loader2 className="h-10 w-10 text-primary animate-spin" />
             </div>
           )}
-           {isClient && renderMapDelayed && (
+           {isClient && ( // Show this overlay only on client
                <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10 pointer-events-none">
                 {selectedPosition
                   ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
