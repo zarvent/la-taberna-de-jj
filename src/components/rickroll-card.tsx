@@ -17,10 +17,10 @@ export function RickRollCard() {
           <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent group-hover:animate-icon-pop" />
           <div>
             <CardTitle className="text-xl sm:text-2xl font-bold text-primary group-hover:text-accent transition-colors">
-              ¡Una Sorpresa de Los Discípulos de JJ para Ti!
+              ¡Reclama una cerveza GRATIS!
             </CardTitle>
             <CardDescription className="text-sm sm:text-base text-muted-foreground pt-1">
-              ¿Listo para algo que te alegrará el día? ¡Tenemos una cerveza... de risas esperándote!
+              ¿Listo para algo que te alegrará el día? ¡Tenemos una cerveza gratis esperándote!
             </CardDescription>
           </div>
         </div>
@@ -33,7 +33,7 @@ export function RickRollCard() {
         >
           <Link href={rickRollUrl} target="_blank" rel="noopener noreferrer">
             <Gift className="mr-2 h-5 w-5 group-hover/button:animate-icon-pop" />
-            ¡Reclamar Mi Sorpresa!
+            ¡Reclamar Mi Cerveza!
           </Link>
         </Button>
       </CardContent>
