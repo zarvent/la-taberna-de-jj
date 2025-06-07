@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -122,7 +121,7 @@ export function BeverageSearch() {
         </div>
 
         {filteredAndSortedBeverages.length > 0 ? (
-           <ScrollArea className="h-[600px] lg:h-auto lg:max-h-[calc(3*28rem+2*1.5rem)] pr-2 sm:pr-3 -mr-2 sm:-mr-3">
+           <ScrollArea className="flex-grow overflow-auto pr-2 sm:pr-3 -mr-2 sm:-mr-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 sm:gap-x-5 gap-y-5 sm:gap-y-6">
               {filteredAndSortedBeverages.map((beverage, index) => (
                 <BeverageCard 

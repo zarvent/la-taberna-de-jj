@@ -1,13 +1,15 @@
-
 import Image from "next/image";
 import type { Beverage } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Martini, Beer as BeerIcon, Wine, Package as PackageIcon, GlassWater } from "lucide-react";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface BeverageCardProps {
   beverage: Beverage;
   className?: string;
+  style?: React.CSSProperties; // Added style prop to fix the error
 }
 
 const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
@@ -23,6 +25,10 @@ const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
 };
 
 export function BeverageCard({ beverage, className }: BeverageCardProps) {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleModalToggle = () => setModalOpen(!isModalOpen);
+
   return (
     <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}>
       <CardHeader className="p-0 relative">
@@ -57,11 +63,27 @@ export function BeverageCard({ beverage, className }: BeverageCardProps) {
           size="sm" 
           variant="default" 
           className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg text-xs px-2.5 py-1.5 h-8 sm:text-sm sm:px-3 sm:py-2 sm:h-9 group/button"
+          onClick={handleModalToggle}
         >
-          <ShoppingCart className="mr-1 sm:mr-1.5 h-3.5 w-3.5 group-hover/button:animate-icon-pop" />
-          Añadir
+          Ver Disponibilidad
         </Button>
       </CardFooter>
+
+      <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{beverage.name}</DialogTitle>
+          </DialogHeader>
+          <div>
+            {/* Replace this with actual store data */}
+            <p>Lista de tiendas con disponibilidad:</p>
+            <ul>
+              <li>Licorería El Gato Negro - En Stock (10)</li>
+              <li>Licorería La Esquina - Poco Stock (3)</li>
+            </ul>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
