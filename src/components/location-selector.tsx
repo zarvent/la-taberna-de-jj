@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, Suspense } from "react";
@@ -16,24 +15,32 @@ const LocationSelectorMap = React.lazy(() =>
   import('./location-selector-map').then(module => ({ default: module.LocationSelectorMap }))
 );
 
-const LocationSelectorComponent = () => {
-  const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
+interface LocationSelectorProps {
+  selectedLocation: L.LatLngTuple | null;
+  setSelectedLocation: (location: L.LatLngTuple | null) => void;
+}
+
+const LocationSelectorComponent: React.FC<LocationSelectorProps> = ({ selectedLocation, setSelectedLocation }) => {
+  const [currentSelectedPosition, setCurrentSelectedPosition] = useState<L.LatLngTuple | null>(selectedLocation);
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    // Sync with prop if it changes externally
+    setCurrentSelectedPosition(selectedLocation);
+  }, [selectedLocation]);
 
   const handleConfirmLocation = () => {
-    if (selectedPosition) {
+    if (currentSelectedPosition) {
+      // setSelectedLocation(currentSelectedPosition); // Already set onMapClick
       toast({
         title: "📍 Área de Búsqueda Actualizada",
-        description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}. (Funcionalidad de filtro no implementada)`,
+        description: `Buscando cerca de: Lat ${currentSelectedPosition[0].toFixed(4)}, Lng ${currentSelectedPosition[1].toFixed(4)}.`,
         duration: 4000,
         className: "bg-primary text-primary-foreground",
       });
-      console.log("Ubicación confirmada:", { lat: selectedPosition[0], lng: selectedPosition[1] });
+      console.log("Ubicación confirmada:", { lat: currentSelectedPosition[0], lng: currentSelectedPosition[1] });
     } else {
       toast({
         title: "⚠️ Sin Selección",
@@ -45,8 +52,9 @@ const LocationSelectorComponent = () => {
   };
 
   const handleMapClick = useCallback((latlng: L.LatLngTuple) => {
-    setSelectedPosition(latlng);
-  }, []);
+    setCurrentSelectedPosition(latlng); // Update local state for visual marker
+    setSelectedLocation(latlng); // Update parent state
+  }, [setSelectedLocation]);
 
   const MapLoadingPlaceholder = () => (
     <div style={{ height: "100%", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0' }} className="rounded-lg">
@@ -73,7 +81,7 @@ const LocationSelectorComponent = () => {
               <LocationSelectorMap
                 center={SANTA_CRUZ_COORDS}
                 zoom={INITIAL_ZOOM}
-                selectedPosition={selectedPosition}
+                selectedPosition={currentSelectedPosition} // Use local state for marker
                 onMapClick={handleMapClick}
                 mapPlaceholder={<MapLoadingPlaceholder />}
               />
@@ -83,8 +91,8 @@ const LocationSelectorComponent = () => {
           )}
            {isClient && (
                <div className="absolute bottom-2 left-2 bg-card/80 backdrop-blur-sm p-2 rounded-md shadow-lg text-xs text-muted-foreground border border-border/50 group-hover:opacity-100 opacity-80 transition-opacity z-10 pointer-events-none">
-                {selectedPosition
-                  ? `Seleccionado: Lat ${selectedPosition[0].toFixed(2)}, Lng ${selectedPosition[1].toFixed(2)}`
+                {currentSelectedPosition
+                  ? `Seleccionado: Lat ${currentSelectedPosition[0].toFixed(2)}, Lng ${currentSelectedPosition[1].toFixed(2)}`
                   : "Haz clic en el mapa para elegir"}
             </div>
            )}
@@ -95,7 +103,7 @@ const LocationSelectorComponent = () => {
             onClick={handleConfirmLocation}
             size="lg"
             className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-lg text-base group"
-            disabled={!selectedPosition}
+            disabled={!currentSelectedPosition}
           >
             <CheckCircle className="mr-2 h-5 w-5 group-hover:animate-icon-pop" />
             Confirmar Ubicación
@@ -108,4 +116,6 @@ const LocationSelectorComponent = () => {
 
 LocationSelectorComponent.displayName = 'LocationSelector';
 // LocationSelector is dynamically imported by MainApplication, so we memo here.
-export const LocationSelector = React.memo(LocationSelectorComponent);
+export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
+  return <LocationSelectorComponent {...props} />;
+};

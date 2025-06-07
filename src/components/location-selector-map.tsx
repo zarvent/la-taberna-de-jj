@@ -1,10 +1,15 @@
-
 "use client";
 
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef, memo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, type MapContainerProps } from 'react-leaflet';
+import L, { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import type L from 'leaflet';
+
+// Import Leaflet's default icon images
+import iconRetinaUrlAsset from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrlAsset from 'leaflet/dist/images/marker-icon.png';
+import shadowUrlAsset from 'leaflet/dist/images/marker-shadow.png';
+
 // Ensure lucide-react is imported if used in mapPlaceholder
 // import { Loader2 } from 'lucide-react';
 
@@ -56,6 +61,21 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
   mapPlaceholder,
 }: LocationSelectorMapProps) {
   const mapRef = useRef<L.Map | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+
+  useEffect(() => {
+    // Configure Leaflet's default icon paths
+    // @ts-ignore
+    delete L.Icon.Default.prototype._getIconUrl; 
+    
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: iconRetinaUrlAsset.src,
+      iconUrl: iconUrlAsset.src,
+      shadowUrl: shadowUrlAsset.src,
+    });
+    
+    setMapReady(true);
+  }, []);
 
   useEffect(() => {
     // This effect's primary role is to manage cleanup for the Leaflet map instance
@@ -71,6 +91,24 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
     };
   }, []); // Empty dependency array: runs effect on mount, cleanup on unmount.
 
+  const MapEvents = () => {
+    useMapEvents({
+      click: (e) => {
+        onMapClick(e.latlng);
+      },
+    });
+    return null;
+  };
+
+  if (!mapReady) {
+    return (
+      <div className="flex items-center justify-center h-64 w-full bg-gray-100">
+        <p className="text-gray-600">Cargando mapa...</p>
+        {/* You could add a spinner here */}
+      </div>
+    );
+  }
+
   return (
     <MapContainer
       center={center}
@@ -79,20 +117,6 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
       style={{ height: '100%', width: '100%' }}
       className="rounded-lg z-0" // z-0 can sometimes help with stacking context issues if popups are hidden
       placeholder={mapPlaceholder} // Provided by parent, typically a loading spinner
-      whenCreated={(mapInstance) => {
-        // This callback is invoked by react-leaflet when the Leaflet map instance is ready.
-        // In Strict Mode, this might be called twice if the component re-mounts.
-        // The guard ensures we only assign if our ref is currently null.
-        if (mapRef.current === null) {
-          mapRef.current = mapInstance;
-          // console.log("Map instance assigned to mapRef:", mapInstance);
-        } else {
-          // This case might happen if whenCreated is called again without a proper unmount/cleanup cycle
-          // or on an HMR update where the ref wasn't nulled.
-          // The cleanup effect should prevent this by nulling mapRef.current.
-          // console.warn("whenCreated called but mapRef.current was not null. This might happen with HMR or StrictMode if cleanup/re-mount is not perfect.", mapRef.current, mapInstance);
-        }
-      }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
@@ -106,6 +130,7 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
         </Marker>
       )}
       <LocationClickHandler onMapClick={onMapClick} />
+      <MapEvents />
     </MapContainer>
   );
 });

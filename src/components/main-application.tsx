@@ -1,4 +1,3 @@
-
 "use client";
 
 import { AppHeader } from "@/components/layout/header";
@@ -8,6 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { PackageSearch, Building, Gift, PartyPopper, Loader2, Compass } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useState } from "react";
+import type L from 'leaflet';
+import { mockStores } from "@/lib/mock-data"; // Import mockStores
 
 const LocationSelector = dynamic(
   () => import('@/components/location-selector').then(mod => mod.LocationSelector),
@@ -52,13 +54,16 @@ const StoreList = dynamic(() => import('@/components/store-list').then(mod => mo
 
 
 export function MainApplication() {
+  const [selectedLocation, setSelectedLocation] = useState<L.LatLngTuple | null>(null);
+  const [searchedBeverageId, setSearchedBeverageId] = useState<string | null>(null); // Add state for searched beverage
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <AppHeader />
       <main className="flex-grow container mx-auto px-4 py-6 sm:py-8 md:py-10 space-y-8 md:space-y-10">
 
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.1s'}}>
-          <LocationSelector />
+          <LocationSelector selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
         </div>
 
         <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
@@ -86,11 +91,12 @@ export function MainApplication() {
           </TabsList>
 
           <TabsContent value="beverages" className="mt-6 sm:mt-8 rounded-xl p-0">
-            <BeverageSearch />
+            {/* Update BeverageSearch to accept and call setSearchedBeverageId when a beverage is searched */}
+            <BeverageSearch setSearchedBeverageId={setSearchedBeverageId} />
           </TabsContent>
 
           <TabsContent value="stores" className="mt-6 sm:mt-8 space-y-6 sm:space-y-8">
-            <StoreMap />
+            <StoreMap userLocation={selectedLocation} stores={mockStores} searchedBeverageId={searchedBeverageId} />
             <StoreList />
           </TabsContent>
         </Tabs>
