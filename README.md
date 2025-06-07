@@ -11,8 +11,9 @@
 - **Información de Tiendas:** Muestra una lista de tiendas con todos sus datos: nombre, dirección, horarios, fotos y opiniones. Cada tienda tiene su propia página donde puedes ver qué productos tiene y sus precios.
 - **Diseño Moderno:** La aplicación funciona bien en celulares y computadoras, con un diseño atractivo y fácil de usar.
 <br><br>
-
+---
 **👨🏻‍🔧 ¿Cómo está hecha la aplicación?**
+<br><br>
 Usamos tecnologías modernas para crear la aplicación:
 
 - Next.js como base principal (versión 15.2.3, utilizando Turbopack para optimizar el entorno de desarrollo).
