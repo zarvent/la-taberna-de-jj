@@ -2,7 +2,7 @@
 - Cesar Sebastian Zambrana Ventura
 - Adrian Santiago Rada Paredes
 - Alain Antonhy Flores Tapia
-
+---
 **👨🏻‍🏫 Características Principales:**
 
 - **Control de Edad:** Antes de mostrar el contenido, verifica que el usuario sea mayor de 18 años. Esta verificación se guarda en el navegador para futuras visitas.
