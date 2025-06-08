@@ -1,9 +1,13 @@
-### 🍺 **La Taberna De JJ**
+# 🍺 **La Taberna De JJ**
+🏫 [Universidad Catolica Boliviana San Pablo](https://scz.ucb.edu.bo/)
 - Cesar Sebastian Zambrana Ventura
 - Adrian Santiago Rada Paredes
 - Alain Antonhy Flores Tapia
 ---
-**👨🏻‍🏫 Características Principales:**
+## 👨🏻‍🏫 Introduccion
+- Proyecto final del curso [ISW-111] Fundamentos en Ingeniería de Software. Este proyecto ha sido desarrollado bajo la guía y supervisión del docente Paulo César Loayza Carrasco, El trabajo fue llevado por el grupo "Los Discípulos de JJ", quienes hemos aplicado los conceptos aprendidos a lo largo del curso para desarrollar este proyecto.
+---
+**🧑🏻‍💻 Características Principales:**
 
 - **Control de Edad:** Antes de mostrar el contenido, verifica que el usuario sea mayor de 18 años. Esta verificación se guarda en el navegador para futuras visitas.
 - **Mapa de Ubicaciones:** Tiene un mapa interactivo para buscar tiendas en Santa Cruz. En el futuro, permitirá filtrar tiendas por zona (Norte/Sur) o por tu ubicación actual.
