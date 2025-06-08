@@ -5,7 +5,7 @@
 - Alain Antonhy Flores Tapia
 ---
 ## 👨🏻‍🏫 Introduccion
-- Proyecto final del curso [ISW-111] Fundamentos en Ingeniería de Software. Este proyecto ha sido desarrollado bajo la guía y supervisión del docente Paulo César Loayza Carrasco, El trabajo fue llevado por el grupo "Los Discípulos de JJ", quienes hemos aplicado los conceptos aprendidos a lo largo del curso para desarrollar este proyecto.
+- Proyecto final del curso [ISW-111] Fundamentos en Ingeniería de Software. Este proyecto ha sido desarrollado bajo la guía y supervisión del docente **Paulo César Loayza Carrasco**, El trabajo fue llevado por el grupo **"Los Discípulos de JJ"**, quienes hemos aplicado los conceptos aprendidos a lo largo del curso para desarrollar este proyecto.
 ---
 **🧑🏻‍💻 Características Principales:**
 
