@@ -23,7 +23,7 @@ async function getBeverageData(id: string): Promise<Beverage | null> {
 }
 
 interface StorePageParams {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
@@ -33,7 +33,8 @@ export async function generateStaticParams() {
 }
 
 export default async function StoreDetailsPage({ params }: StorePageParams) {
-  const store = await getStoreData(params.id);
+  const { id } = await params;
+  const store = await getStoreData(id);
 
   if (!store) {
     notFound();
