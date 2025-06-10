@@ -9,6 +9,11 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+  			mono: ['var(--font-geist-mono)', 'monospace'],
+  			serif: ['var(--font-playfair-display)', 'serif'], // Add Playfair Display for headings
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

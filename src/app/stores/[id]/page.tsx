@@ -81,7 +81,7 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
               {/* Imágenes Secundarias - Layout de escritorio */}
               <div className="hidden md:grid md:grid-cols-2 gap-0.5">
                 {store.photos.slice(1, 5).map((photo, index) => (
-                  <div key={index} className="relative aspect-square group overflow-hidden">
+                  <div key={index} className="relative aspect-square group overflow-hidden hover:z-10 transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:rounded-lg">
                     <Image
                       src={photo || `https://placehold.co/400x400.png`}
                       alt={`${store.name} vista ${index + 2}`}
@@ -90,6 +90,12 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                       data-ai-hint="interior tienda estantes"
                       loading="lazy"
                     />
+                    {/* Overlay hint for interaction */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
+                        Ver más grande
+                      </div>
+                    </div>
                   </div>
                 ))}
                 {Array(Math.max(0, 4 - Math.max(0, store.photos.length - 1))).fill(0).map((_,i) => (
@@ -182,12 +188,12 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                           <h4 className="text-base sm:text-lg font-medium text-primary mb-0.5 line-clamp-2">{item.beverage.name}</h4>
                           <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">{item.beverage.brand} - {item.beverage.type}</p>
                         </div>
-                        <div className="flex flex-col items-center sm:items-end gap-1 sm:gap-1.5 text-center sm:text-right w-full sm:w-auto sm:min-w-[120px] mt-2 sm:mt-0">
+                        <div className="flex flex-col items-center sm:items-end gap-1 sm:gap-1.5 text-center sm:text-right w-full sm:w-auto sm:min-w-[120px] mt-2 sm:mt-0 group/stock relative">
                           <Badge 
                             variant={item.stock > 5 ? "default" : item.stock > 0 ? "secondary" : "destructive"} 
-                            className={`px-2 sm:px-2.5 py-1 text-xs shadow-md rounded-md ${
+                            className={`px-2 sm:px-2.5 py-1 text-xs shadow-md rounded-md transition-all duration-300 ${
                               item.stock > 5 ? "bg-green-100 text-green-800 border-green-400" : 
-                              item.stock > 0 ? "bg-yellow-100 text-yellow-800 border-yellow-400" : 
+                              item.stock > 0 ? "bg-yellow-100 text-yellow-800 border-yellow-400 animate-subtle-pulse" : 
                               "bg-red-100 text-red-800 border-red-400"
                             }`}
                           >
@@ -197,6 +203,18 @@ export default async function StoreDetailsPage({ params }: StorePageParams) {
                           <p className="text-base sm:text-lg font-semibold text-foreground flex items-center">
                             {item.beverage.price.toFixed(2)} <span className="text-xs font-normal text-muted-foreground ml-1">Bs.</span>
                           </p>
+                          
+                          {/* Hidden action buttons that appear on hover */}
+                          <div className="absolute -right-1 top-1/2 transform -translate-y-1/2 opacity-0 group-hover/stock:opacity-100 transition-all duration-300 translate-x-2 group-hover/stock:translate-x-0">
+                            <div className="flex flex-col gap-1 bg-card/95 backdrop-blur-sm border border-border/50 rounded-lg p-1 shadow-lg">
+                              <button className="text-xs px-2 py-1 text-primary hover:bg-primary/10 rounded transition-colors duration-200 whitespace-nowrap">
+                                Buscar similar
+                              </button>
+                              <button className="text-xs px-2 py-1 text-accent hover:bg-accent/10 rounded transition-colors duration-200 whitespace-nowrap">
+                                ❤ Favorito
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </Card>
                     ))}
