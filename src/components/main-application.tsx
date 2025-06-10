@@ -14,9 +14,11 @@ const LocationSelector = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex flex-col items-center justify-center min-h-[480px] animate-fade-in-up p-6 rounded-xl border border-border/30 bg-muted/20">
-        <Loader2 className="h-12 w-12 text-primary animate-spin mb-4" />
+      <div className="flex flex-col items-center justify-center min-h-[480px] animate-fade-in-up p-6 rounded-xl border border-border/30 bg-muted/20 card-shimmer">
+        <Compass className="h-12 w-12 text-primary animate-icon-tilt mb-4" />
+        <Loader2 className="h-8 w-8 text-accent animate-spin mb-3" />
         <p className="text-lg font-semibold text-muted-foreground">Cargando Explorador de Zonas...</p>
+        <p className="text-sm text-muted-foreground/70 mt-1">Preparando el mapa interactivo...</p>
       </div>
     ),
   }
@@ -24,11 +26,11 @@ const LocationSelector = dynamic(
 
 const RickRollCard = dynamic(() => import('@/components/rickroll-card').then(mod => mod.RickRollCard), {
   loading: () => (
-    <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/60 hover:border-accent/80 bg-gradient-to-tr from-accent/5 via-card to-card group hover:shadow-3xl transition-all duration-300 hover:scale-[1.01] animate-pulse min-h-[150px]">
+    <Card className="shadow-2xl rounded-xl overflow-hidden border border-accent/60 hover:border-accent/80 bg-gradient-to-tr from-accent/5 via-card to-card group hover:shadow-3xl transition-all duration-300 hover:scale-[1.01] card-shimmer min-h-[150px] animate-fade-in-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
       <CardHeader className="pb-3 sm:pb-4">
         <div className="flex items-center">
-          <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent" />
-          <div>
+          <PartyPopper className="h-8 w-8 sm:h-10 sm:w-10 mr-3 sm:mr-4 text-accent animate-icon-pop" />
+          <div className="animate-subtle-pulse">
             <div className="h-6 bg-muted-foreground/20 rounded w-3/4 mb-2"></div>
             <div className="h-4 bg-muted-foreground/20 rounded w-full"></div>
           </div>

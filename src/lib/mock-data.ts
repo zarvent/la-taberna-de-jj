@@ -9,7 +9,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Vodka',
     brand: 'Stolichnaya',
     price: 150.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Stolichnaya Vodka.png',
     description: 'Vodka ruso clásico, suave y puro.'
   },
   {
@@ -18,7 +18,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Beer',
     brand: 'Paceña',
     price: 10.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Paceña Pilsener.png',
     description: 'Cerveza lager boliviana líder, refrescante y con cuerpo.'
   },
   {
@@ -27,7 +27,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Wine',
     brand: 'Kohlberg',
     price: 55.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Vino Kohlberg Tinto.png',
     description: 'Vino tinto de altura, producido en los valles de Tarija.'
   },
   {
@@ -36,7 +36,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Whiskey',
     brand: 'Jameson',
     price: 180.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Jameson Irish Whiskey.png',
     description: 'Whiskey irlandés tridestilado, excepcionalmente suave.'
   },
   {
@@ -45,7 +45,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Beer',
     brand: 'Cordillera',
     price: 12.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Cordillera.png',
     description: 'Cerveza artesanal boliviana con un toque especial.'
   },
   {
@@ -63,7 +63,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Other', 
     brand: 'Coca-Cola',
     price: 8.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Coca Cola.png',
     description: 'Refresco de cola clásico.'
   },
   {
@@ -72,7 +72,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Other', 
     brand: 'Jägermeister',
     price: 160.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Jägermeister.png',
     description: 'Licor de hierbas alemán, popular globalmente.'
   },
   {
@@ -81,7 +81,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Other', 
     brand: 'Branca',
     price: 130.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Fernet Branca.png',
     description: 'Licor de hierbas amargo italiano, a menudo mezclado con cola.'
   },
   {
@@ -90,7 +90,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Beer',
     brand: 'Huari',
     price: 11.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Huari Lager.png',
     description: 'Cerveza boliviana premium con un sabor equilibrado.'
   },
   {
@@ -99,7 +99,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Other', 
     brand: 'Casa Real',
     price: 90.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Singani Casa Real Etiqueta Negra.png',
     description: 'Singani boliviano premium, destilado de uvas Moscatel de Alejandría.'
   },
   {
@@ -108,7 +108,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Other', 
     brand: 'Ron Abuelo',
     price: 140.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Ron Abuelo Añejo.png',
     description: 'Ron panameño añejo, suave y rico.'
   },
   {
@@ -117,7 +117,7 @@ export const mockBeverages: Beverage[] = [
     type: 'Other', 
     brand: 'Sprite',
     price: 7.00, 
-    imageUrl: 'https://placehold.co/300x400.png',
+    imageUrl: '/imagenes/Sprite.png',
     description: 'Refresco de lima-limón.'
   }
 ];
