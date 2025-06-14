@@ -4,6 +4,8 @@
 - Adrian Santiago Rada Paredes
 - Alain Antonhy Flores Tapia
 
+![WhatsApp Image 2025-06-10 at 15 32 57_b0798b53](https://github.com/user-attachments/assets/da5fa7b6-adea-4b4e-95c1-34c0f9ff08a1)
+
 ---
 
 ## 👨🏻‍🏫 Introduccion
