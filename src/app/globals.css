@@ -12,104 +12,62 @@ body {
 
 @layer base {
   :root {
-    --background: 210 17% 98%; /* Light Cool Gray - #F8F9FA */
-    --foreground: 210 10% 23%; /* Dark Cool Gray - #212529 */
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    
+    /* Primary: Deep Imperial Blue - Used for main actions, navigation, and important elements */
+    --primary: 210 70% 45%; /* A rich, commanding blue */
+    --primary-foreground: 210 20% 98%; /* White or very light blue for high contrast */
 
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 210 10% 23%; /* Dark Cool Gray */
+    /* Secondary: Sky Blue/Light Cyan - Used for secondary actions, backgrounds, or subtle highlights */
+    --secondary: 195 65% 75%; /* A lighter, airy blue */
+    --secondary-foreground: 210 50% 25%; /* Darker blue for readability */
 
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 210 10% 23%; /* Dark Cool Gray */
+    /* Accent: Imperial Gold - Used for highlights, calls to action, and rewarding interactions */
+    --accent: 35 85% 60%; /* A warm, vibrant gold */
+    --accent-foreground: 40 90% 15%; /* Dark brown or deep bronze for text on gold */
 
-    --primary: 220 100% 30%; /* Russian Blue - #003399 */
-    --primary-foreground: 0 0% 100%; /* White */
-
-    --secondary: 195 53% 79%; /* Light Blue - #ADD8E6 */
-    --secondary-foreground: 220 100% 20%; /* Darker Blue for text on secondary */
-
-    /* Muted colors adjusted for better contrast */
-    --muted: 210 20% 96%; /* Lighter Gray - was 90% #F2F4F5 */
-    --muted-foreground: 210 12% 35%; /* Darker Medium Gray - was 210 15% 45% #505A66 */
-    /* Contrast of new muted-foreground on new muted: ~5.1:1 (Good) */
-    /* Contrast of new muted-foreground on background: ~6.6:1 (Excellent) */
-
-
-    --accent: 51 100% 50%; /* Gold - #FFD700 */
-    --accent-foreground: 51 100% 10%; /* Dark Brown for text on gold */
-
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
-    --border: 210 16% 82%; /* Light Grey Border - #CED4DA */
-    --input: 210 16% 82%; /* Light Grey Input Background - #CED4DA */
-    --ring: 220 100% 50%; /* Brighter Blue for focus rings */
-
-    --chart-1: 220 70% 50%;
-    --chart-2: 195 60% 60%;
-    --chart-3: 51 80% 55%;
-    --chart-4: 210 50% 70%;
-    --chart-5: 0 70% 60%;
-
-    --radius: 0.5rem;
-
-    /* Sidebar specific theme variables, adjust if sidebar is used */
-    --sidebar-background: 220 100% 25%; /* Darker Blue for Sidebar */
-    --sidebar-foreground: 0 0% 100%; /* White text for Sidebar */
-    --sidebar-primary: 51 100% 60%; /* Gold as primary accent in sidebar */
-    --sidebar-primary-foreground: 51 100% 10%; /* Dark text for gold */
-    --sidebar-accent: 220 100% 40%; /* Lighter Blue for sidebar accent */
-    --sidebar-accent-foreground: 0 0% 100%; /* White text for sidebar accent */
-    --sidebar-border: 220 100% 35%; /* Slightly lighter blue for border */
-    --sidebar-ring: 51 100% 50%; /* Gold for ring */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 210 70% 45%; /* Using primary blue for focus rings */
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 220 25% 10%; /* Very Dark Blue */
-    --foreground: 210 17% 90%; /* Light Gray */
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
 
-    --card: 220 25% 15%; /* Darker Blue/Gray */
-    --card-foreground: 210 17% 90%;
+    /* Primary: Deep Imperial Blue - Dark Mode */
+    --primary: 210 70% 55%; /* Slightly lighter blue for dark mode visibility */
+    --primary-foreground: 210 20% 98%;
 
-    --popover: 220 25% 15%;
-    --popover-foreground: 210 17% 90%;
+    /* Secondary: Sky Blue/Light Cyan - Dark Mode */
+    --secondary: 195 50% 30%; /* Darker, muted blue for dark backgrounds */
+    --secondary-foreground: 195 65% 85%; /* Lighter text for contrast */
 
-    --primary: 220 100% 60%; /* Lighter Blue for dark mode */
-    --primary-foreground: 220 100% 10%; /* Dark Blue text on Lighter Blue */
-
-    --secondary: 195 53% 40%; /* Darker Light Blue */
-    --secondary-foreground: 195 53% 90%; /* Lighter text on Darker Light Blue */
-
-    /* Muted colors adjusted for better contrast in dark mode */
-    --muted: 220 25% 20%; /* Darker muted - was 25% #293240 */
-    --muted-foreground: 210 17% 80%; /* Lighter muted-foreground - was 70% #BFC6D9 */
-    /* Contrast of new dark muted-foreground on new dark muted: ~5.6:1 (Good) */
-    /* Contrast of new dark muted-foreground on dark background: ~7.9:1 (Excellent) */
-
-    --accent: 51 100% 60%; /* Brighter Gold for dark mode */
-    --accent-foreground: 51 100% 10%;
-
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 220 25% 30%;
-    --input: 220 25% 30%;
-    --ring: 220 100% 70%;
-
-    --chart-1: 220 70% 60%;
-    --chart-2: 195 60% 70%;
-    --chart-3: 51 80% 65%;
-    --chart-4: 210 50% 80%;
-    --chart-5: 0 70% 70%;
-
-    /* Dark Sidebar specific theme variables */
-    --sidebar-background: 220 30% 12%; /* Very Dark Blue for Sidebar */
-    --sidebar-foreground: 0 0% 90%; /* Light Gray text for Sidebar */
-    --sidebar-primary: 51 100% 60%; /* Gold as primary accent in sidebar */
-    --sidebar-primary-foreground: 51 100% 10%; /* Dark text for gold */
-    --sidebar-accent: 220 100% 55%; /* Lighter Blue for sidebar accent */
-    --sidebar-accent-foreground: 0 0% 100%; /* White text for sidebar accent */
-    --sidebar-border: 220 30% 20%; /* Slightly lighter shade for border */
-    --sidebar-ring: 51 100% 50%; /* Gold for ring */
+    /* Accent: Imperial Gold - Dark Mode */
+    --accent: 40 90% 65%; /* Slightly brighter gold for dark mode pop */
+    --accent-foreground: 35 85% 20%;
+    
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 215 25% 65.1%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 210 70% 55%; /* Using primary blue for focus rings in dark mode */
   }
 }
 
@@ -120,35 +78,97 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  /* Apply Playfair Display to headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif; /* Uses the --font-playfair-display variable */
+  }
 }
 
-/* Custom Animations by Carmen Ansio ;) */
+/* Custom Animations */
 @layer utilities {
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+  .animate-icon-pop {
+    animation: icon-pop 0.5s ease-out;
+  }
+  @keyframes icon-pop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+
+  .animate-icon-tilt {
+    animation: icon-tilt 0.8s infinite ease-in-out alternate;
+  }
+  @keyframes icon-tilt {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+  }
+
+  /* Fade in up animation for modals and cards */
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+  @keyframes fade-in-up {
+    0% { 
+      opacity: 0; 
+      transform: translateY(20px); 
     }
+    100% { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+
+  /* Subtle pulse animation for low stock items */
+  .animate-subtle-pulse {
+    animation: subtle-pulse 2s infinite ease-in-out;
+  }
+  @keyframes subtle-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Wave/Pulse effect for map click */
+  .map-click-pulse {
+    position: absolute;
+    border-radius: 50%;
+    background-color: hsl(var(--accent) / 0.5);
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%) scale(0);
+    animation: map-pulse 0.7s ease-out;
+    pointer-events: none; /* So it doesn't interfere with map interactions */
+  }
+
+  @keyframes map-pulse {
     to {
-      opacity: 1;
-      transform: translateY(0);
+      transform: translate(-50%, -50%) scale(3);
+      opacity: 0;
     }
   }
-  @keyframes subtleShimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
+
+  /* Directional shimmer effect for premium cards */
+  .card-shimmer {
+    position: relative;
+    overflow: hidden;
   }
-  @keyframes iconPop {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.15) rotate(-5deg); }
+  
+  .card-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--accent) / 0.2),
+      transparent
+    );
+    transition: left 0.5s ease;
+    pointer-events: none;
   }
-  @keyframes iconTilt {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-8deg); }
-    75% { transform: rotate(5deg); }
-  }
-  @keyframes pulseAlt {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
+  
+  .card-shimmer:hover::before {
+    left: 100%;
   }
 }

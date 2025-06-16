@@ -1,8 +1,10 @@
-
 "use client";
 
+import { useState } from "react";
 import {
   AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -10,7 +12,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, ShieldX } from "lucide-react";
+import { ShieldCheck, Loader2 } from "lucide-react";
 
 interface AgeVerificationModalProps {
   isOpen: boolean;
@@ -18,40 +20,73 @@ interface AgeVerificationModalProps {
 }
 
 export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalProps) {
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const handleVerify = async () => {
+    setIsVerifying(true);
+    // Simulate API call with enhanced feedback
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    onVerify(true);
+    setIsVerifying(false);
+  };
+
+  const handleCancel = () => {
+    onVerify(false);
+  };
+
   if (!isOpen) return null;
 
   return (
     <AlertDialog open={isOpen} onOpenChange={() => { /* Controlado por el padre */ }}>
-      <AlertDialogContent className="max-w-md shadow-2xl rounded-xl border-border/50 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:duration-500">
-        <AlertDialogHeader className="pt-4">
-          <div className="flex justify-center mb-5">
-            <ShieldCheck className="h-20 w-20 sm:h-24 sm:w-24 text-primary drop-shadow-lg animate-icon-pop" style={{animationDelay: '0.2s'}} />
+      <AlertDialogContent 
+        className="bg-card border-2 border-accent/50 shadow-xl shadow-accent/20 rounded-lg animate-fade-in-up opacity-0"
+        style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
+      >
+        <AlertDialogHeader className="text-center">
+          <div className="mx-auto mb-4">
+            {/* Enhanced thematic icon with golden glow effect */}
+            <ShieldCheck 
+              className="h-16 w-16 text-accent animate-icon-pop mx-auto" 
+              style={{
+                animationDelay: '0.3s',
+                filter: 'drop-shadow(0 0 8px hsl(var(--accent) / 0.5))'
+              }} 
+            />
           </div>
-          <AlertDialogTitle className="text-2xl sm:text-3xl font-bold text-center text-foreground">
-            Verificación de Edad
+          <AlertDialogTitle className="font-serif text-2xl text-primary">
+            Verificación de Edad Requerida
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center text-muted-foreground pt-2 text-base sm:text-lg">
-            ¡Bienvenido/a a La Taberna de JJ! Antes de empezar la diversión, ¿nos confirmas que eres mayor de 18 años? ¡Salud!
+          <AlertDialogDescription className="text-muted-foreground text-base pt-2">
+            Debes ser mayor de 18 años para ingresar a La Taberna de JJ.
+            Por favor, confirma tu edad para continuar.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 pb-3">
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => onVerify(false)}
-            className="w-full text-destructive border-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive transition-all duration-300 hover:scale-105 active:scale-95"
+        <AlertDialogFooter className="mt-6 gap-3 sm:gap-4">
+          <AlertDialogCancel 
+            onClick={handleCancel}
+            className="w-full sm:w-auto border-muted-foreground/50 hover:bg-muted/80 transition-colors duration-300"
+            disabled={isVerifying}
           >
-            <ShieldX className="mr-2 h-5 w-5" />
-            No, soy menor
-          </Button>
-          <Button
-            size="lg"
-            onClick={() => onVerify(true)}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground focus-visible:ring-primary transition-all duration-300 hover:scale-105 active:scale-95"
+            Salir
+          </AlertDialogCancel>
+          <AlertDialogAction 
+            onClick={handleVerify}
+            disabled={isVerifying}
+            className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-out focus:ring-2 focus:ring-accent focus:ring-offset-2 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+            style={{
+              boxShadow: isVerifying ? '0 0 15px hsl(var(--accent))' : undefined,
+              background: isVerifying ? 'hsl(var(--accent))' : undefined
+            }}
           >
-            <ShieldCheck className="mr-2 h-5 w-5" />
-            Sí, soy mayor de 18
-          </Button>
+            {isVerifying ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> 
+                Verificando...
+              </>
+            ) : (
+              'Sí, soy mayor de 18'
+            )}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

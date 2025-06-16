@@ -10,13 +10,17 @@ import { Badge } from "@/components/ui/badge";
 interface StoreCardProps {
   store: Store;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function StoreCard({ store, className }: StoreCardProps) {
+export function StoreCard({ store, className, style }: StoreCardProps) {
   const totalStockItems = store.inventory.reduce((sum, item) => sum + (item.stock > 0 ? 1 : 0), 0);
 
   return (
-    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}>
+    <Card 
+      className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] card-shimmer ${className}`} 
+      style={style}
+    >
       <CardHeader className="p-0 relative">
         <div className="aspect-[16/10] w-full overflow-hidden bg-muted/30">
           <Image
@@ -29,8 +33,8 @@ export function StoreCard({ store, className }: StoreCardProps) {
           />
         </div>
         {store.rating && (
-            <Badge variant="secondary" className="absolute top-2 right-2 bg-accent text-accent-foreground px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold flex items-center shadow-md border border-accent-foreground/20 group-hover:animate-icon-pop">
-                <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1 fill-current" /> {store.rating.toFixed(1)}
+            <Badge variant="secondary" className="absolute top-2 right-2 bg-accent text-accent-foreground px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold flex items-center shadow-md border border-accent-foreground/20 animate-fade-in-up opacity-0" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+                <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1 fill-current animate-icon-pop" style={{ animationDelay: '0.7s' }} /> {store.rating.toFixed(1)}
             </Badge>
         )}
       </CardHeader>

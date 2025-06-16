@@ -19,14 +19,20 @@ const LocationSelectorMap = React.lazy(() =>
 const LocationSelectorComponent = () => {
   const [selectedPosition, setSelectedPosition] = useState<L.LatLngTuple | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const handleConfirmLocation = () => {
+  const handleConfirmLocation = async () => {
     if (selectedPosition) {
+      setIsConfirming(true);
+      
+      // Simulate processing time for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
       toast({
         title: "📍 Área de Búsqueda Actualizada",
         description: `Buscando cerca de: Lat ${selectedPosition[0].toFixed(4)}, Lng ${selectedPosition[1].toFixed(4)}. (Funcionalidad de filtro no implementada)`,
@@ -34,6 +40,7 @@ const LocationSelectorComponent = () => {
         className: "bg-primary text-primary-foreground",
       });
       console.log("Ubicación confirmada:", { lat: selectedPosition[0], lng: selectedPosition[1] });
+      setIsConfirming(false);
     } else {
       toast({
         title: "⚠️ Sin Selección",
@@ -95,10 +102,23 @@ const LocationSelectorComponent = () => {
             onClick={handleConfirmLocation}
             size="lg"
             className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl rounded-lg text-base group"
-            disabled={!selectedPosition}
+            disabled={!selectedPosition || isConfirming}
+            style={{
+              boxShadow: isConfirming ? '0 0 15px hsl(var(--accent))' : undefined,
+              background: isConfirming ? 'hsl(var(--accent))' : undefined
+            }}
           >
-            <CheckCircle className="mr-2 h-5 w-5 group-hover:animate-icon-pop" />
-            Confirmar Ubicación
+            {isConfirming ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Confirmando...
+              </>
+            ) : (
+              <>
+                <CheckCircle className="mr-2 h-5 w-5 group-hover:animate-icon-pop" />
+                Confirmar Ubicación
+              </>
+            )}
           </Button>
         </div>
       </CardContent>
