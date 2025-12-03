@@ -79,20 +79,7 @@ const LocationSelectorMapComponent = memo(function LocationSelectorMapComponent(
       style={{ height: '100%', width: '100%' }}
       className="rounded-lg z-0" // z-0 can sometimes help with stacking context issues if popups are hidden
       placeholder={mapPlaceholder} // Provided by parent, typically a loading spinner
-      whenCreated={(mapInstance) => {
-        // This callback is invoked by react-leaflet when the Leaflet map instance is ready.
-        // In Strict Mode, this might be called twice if the component re-mounts.
-        // The guard ensures we only assign if our ref is currently null.
-        if (mapRef.current === null) {
-          mapRef.current = mapInstance;
-          // console.log("Map instance assigned to mapRef:", mapInstance);
-        } else {
-          // This case might happen if whenCreated is called again without a proper unmount/cleanup cycle
-          // or on an HMR update where the ref wasn't nulled.
-          // The cleanup effect should prevent this by nulling mapRef.current.
-          // console.warn("whenCreated called but mapRef.current was not null. This might happen with HMR or StrictMode if cleanup/re-mount is not perfect.", mapRef.current, mapInstance);
-        }
-      }}
+      ref={mapRef}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'

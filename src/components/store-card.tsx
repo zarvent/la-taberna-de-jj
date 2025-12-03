@@ -10,13 +10,14 @@ import { Badge } from "@/components/ui/badge";
 interface StoreCardProps {
   store: Store;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function StoreCard({ store, className }: StoreCardProps) {
+export function StoreCard({ store, className, style }: StoreCardProps) {
   const totalStockItems = store.inventory.reduce((sum, item) => sum + (item.stock > 0 ? 1 : 0), 0);
 
   return (
-    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}>
+    <Card style={style} className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}>
       <CardHeader className="p-0 relative">
         <div className="aspect-[16/10] w-full overflow-hidden bg-muted/30">
           <Image

@@ -180,4 +180,33 @@ export const mockStores: Store[] = [
     ],
     rating: 4.8,
   },
+  {
+    id: 'store4',
+    name: 'Licorería 24/7',
+    address: 'Av. Cristo Redentor, 4to Anillo',
+    hours: '24 Horas',
+    photos: ['https://placehold.co/600x400.png'],
+    latitude: -17.7500,
+    longitude: -63.1700,
+    inventory: [
+        { beverageId: 'bev2', stock: 50 },
+        { beverageId: 'bev5', stock: 20 },
+        { beverageId: 'bev7', stock: 100 },
+    ],
+    rating: 4.0
+  },
+  {
+      id: 'store5',
+      name: 'Vinos y Licores El Solar',
+      address: 'Av. Las Americas #123',
+      hours: 'Lun-Dom: 10am-11pm',
+      photos: ['https://placehold.co/600x400.png'],
+      latitude: -17.8000,
+      longitude: -63.1900,
+      inventory: [
+          { beverageId: 'bev3', stock: 30 },
+          { beverageId: 'bev11', stock: 15 },
+      ],
+      rating: 4.6
+  }
 ];
