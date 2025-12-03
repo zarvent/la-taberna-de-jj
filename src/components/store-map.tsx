@@ -1,7 +1,23 @@
 
-import Image from "next/image";
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPinned, Info } from "lucide-react";
+import { MapPinned, Info, Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import { mockStores } from "@/lib/mock-data";
+
+const StoreMapInteractive = dynamic(
+  () => import('./store-map-interactive'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center bg-muted/50 rounded-lg">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Cargando mapa...</span>
+      </div>
+    ),
+  }
+);
 
 export function StoreMap() {
   return (
@@ -13,25 +29,12 @@ export function StoreMap() {
         </CardTitle>
         <CardDescription className="text-lg text-muted-foreground pt-1 flex items-center">
             <Info className="h-5 w-5 mr-2 text-accent"/> 
-            Vista de mapa (marcador de posición). Usa el selector de área para filtrar tiendas.
+            Encuentra las tiendas más cercanas a ti. Haz clic en un marcador para más información.
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-6 md:p-8"> {/* Increased padding */}
-        <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center border border-input overflow-hidden shadow-inner"> {/* Changed aspect ratio */}
-          <Image 
-            src="https://placehold.co/1280x720.png" 
-            alt="Marcador de posición del mapa de tiendas en Santa Cruz" 
-            width={1280} 
-            height={720} 
-            className="object-cover w-full h-full opacity-70"
-            data-ai-hint="map bolivia city"
-            priority // LCP Candidate if this component is visible on initial load for a specific route/tab
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <p className="text-2xl font-semibold text-foreground/80 bg-background/50 p-4 rounded-lg backdrop-blur-sm">
-              Mapa Interactivo Próximamente
-            </p>
-          </div>
+      <CardContent className="p-6 md:p-8">
+        <div className="h-[400px] w-full bg-muted rounded-lg overflow-hidden border border-input shadow-inner relative z-0">
+          <StoreMapInteractive stores={mockStores} />
         </div>
       </CardContent>
     </Card>
