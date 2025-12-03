@@ -17,16 +17,18 @@ function usePersistentState<T>(key: string, initialState: T): [T, (value: T | ((
   });
 
   const setValue = useCallback((value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore = value instanceof Function ? value(state) : value;
-      setState(valueToStore);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    setState((prevState) => {
+      const valueToStore = value instanceof Function ? value(prevState) : value;
+      try {
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.error("Error writing to localStorage", error);
       }
-    } catch (error) {
-      console.error("Error writing to localStorage", error);
-    }
-  }, [key, state]);
+      return valueToStore;
+    });
+  }, [key]);
 
   useEffect(() => {
     // This effect ensures that the state is updated if localStorage changes in another tab.
