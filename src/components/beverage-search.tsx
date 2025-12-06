@@ -13,6 +13,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const ALL_FILTER_VALUE = "_ALL_"; 
 
+/**
+ * Componente principal para buscar y filtrar bebidas.
+ * Permite filtrar por texto, tipo y ordenar los resultados.
+ */
 export function BeverageSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>(ALL_FILTER_VALUE);

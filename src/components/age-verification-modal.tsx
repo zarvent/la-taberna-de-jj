@@ -25,7 +25,7 @@ export function AgeVerificationModal({ isOpen, onVerify }: AgeVerificationModalP
       <AlertDialogContent className="max-w-md shadow-2xl rounded-xl border-border/50 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:duration-500">
         <AlertDialogHeader className="pt-4">
           <div className="flex justify-center mb-5">
-            <ShieldCheck className="h-20 w-20 sm:h-24 sm:w-24 text-primary drop-shadow-lg animate-icon-pop" style={{animationDelay: '0.2s'}} />
+            <ShieldCheck className="h-20 w-20 sm:h-24 sm:w-24 text-primary drop-shadow-lg animate-icon-pop [animation-delay:200ms]" />
           </div>
           <AlertDialogTitle className="text-2xl sm:text-3xl font-bold text-center text-foreground">
             Verificación de Edad

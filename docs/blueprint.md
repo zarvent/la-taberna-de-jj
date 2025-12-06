@@ -1,20 +1,18 @@
-# **App Name**: Moscow Tavern Finder
+# **Nombre de la App**: La Taberna De JJ
 
-## Style Guidelines:
+## Guía de Estilo:
 
-- Primary color: Blue (#003399), inspired by the blue in the Russian flag and winter sky.
-- Secondary color: Light Blue (#ADD8E6), reminiscent of frozen rivers and winter landscapes.
-- Accent color: Gold (#FFD700), a touch of opulence inspired by Russian Imperial design.
-- Use a mix of traditional and modern fonts, such as a Cyrillic-inspired font for headings and a clean sans-serif font for body text, ensuring readability.
-- Incorporate custom, detailed icons with a Russian cultural influence, such as matryoshka dolls, samovars, or Kremlin stars, to enhance the thematic consistency.
-- Implement a clear, structured layout with a mobile-first approach, adapting to different screen sizes while maintaining a visually appealing and intuitive user experience.
+- **Color Primario**: Azul Profundo (#003399), evocando la noche y la elegancia.
+- **Color Secundario**: Azul Claro (#ADD8E6), refrescante y moderno.
+- **Color de Acento**: Dorado (#FFD700), para resaltar elementos importantes y dar un toque de calidad.
+- **Tipografía**: Una mezcla equilibrada de fuentes modernas y legibles (Sans-serif) para el cuerpo, con encabezados claros.
+- **Iconografía**: Iconos personalizados relacionados con bebidas y celebración (botellas, copas, brindis) para mantener la consistencia temática.
+- **Diseño**: "Mobile-first", priorizando la experiencia en dispositivos móviles con una interfaz intuitiva y visualmente atractiva.
 
+## Funcionalidades Principales:
 
-## Core Features:
-
-- Age Verification: Age verification modal to ensure users are over 18. Implemented using Firebase Authentication to control access based on verified status.
-- Location Selection: Detect user's location (North/South Santa Cruz) via manual input or GPS. Persist the preference for future sessions.
-- Smart Beverage Search: Enable intelligent search with filters for type, brand, and origin. Display results in a clear, sortable list.
-- Store Locator & Availability: Show nearby liquor stores on a map with markers indicating real-time stock availability.
-- Store Details & Pricing: Details of each store: address, hours, catalog, prices, and photos, all pulled from Firestore. Prioritize using edge functions or a similar caching strategy to minimize reads and latency.
-
+- **Verificación de Edad**: Modal obligatorio para asegurar que los usuarios sean mayores de 18 años, cumpliendo con normativas legales.
+- **Selección de Ubicación**: Detector de ubicación (Norte/Sur Santa Cruz o GPS) para ofrecer resultados relevantes.
+- **Búsqueda Inteligente de Bebidas**: Buscador avanzado con filtros por tipo, marca y precio.
+- **Localizador de Tiendas**: Mapa interactivo que muestra licorerías cercanas con indicadores de stock en tiempo real.
+- **Detalle de Tiendas y Productos**: Información completa de cada tienda (dirección, horarios) y catálogo de productos con precios y fotos.

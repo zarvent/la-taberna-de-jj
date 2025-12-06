@@ -51,22 +51,28 @@ const StoreList = dynamic(() => import('@/components/store-list').then(mod => mo
 });
 
 
+/**
+ * Componente raíz de la aplicación que estructura el layout principal.
+ * Coordina la visualización del header, selector de ubicación, y pestañas de contenido.
+ */
 export function MainApplication() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
       <AppHeader />
       <main className="flex-grow container mx-auto px-4 py-6 sm:py-8 md:py-10 space-y-8 md:space-y-10">
 
-        <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.1s'}}>
+        {/* Selector de Ubicación con animación de entrada */}
+        <div className="animate-fade-in-up opacity-0 [animation-delay:100ms]">
           <LocationSelector />
         </div>
 
-        <div className="animate-fade-in-up opacity-0" style={{animationDelay: '0.2s'}}>
+        {/* Huevo de pascua (Rickroll) con animación de entrada */}
+        <div className="animate-fade-in-up opacity-0 [animation-delay:200ms]">
           <RickRollCard />
         </div>
 
 
-        <Tabs defaultValue="beverages" className="w-full animate-fade-in-up opacity-0" style={{animationDelay: '0.3s'}}>
+        <Tabs defaultValue="beverages" className="w-full animate-fade-in-up opacity-0 [animation-delay:300ms]">
           <TabsList className="grid w-full grid-cols-2 md:max-w-md mx-auto h-auto p-1.5 border bg-muted shadow-md rounded-xl">
             <TabsTrigger
               value="beverages"
