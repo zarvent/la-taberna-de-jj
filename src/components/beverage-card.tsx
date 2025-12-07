@@ -7,11 +7,17 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface BeverageCardProps {
+  /** Objeto de bebida a mostrar. */
   beverage: Beverage;
+  /** Clases CSS adicionales. */
   className?: string;
-  style?: React.CSSProperties; // Added style prop to fix the error
+  /** Estilos en línea opcionales (útil para animaciones escalonadas). */
+  style?: React.CSSProperties;
 }
 
+/**
+ * Componente que renderiza el icono correspondiente al tipo de bebida.
+ */
 const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
   const iconProps = { className: "h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground group-hover:text-accent transition-colors duration-300" };
   switch (type) {
@@ -24,13 +30,20 @@ const TypeIcon = ({ type }: { type: Beverage['type'] }) => {
   }
 };
 
-export function BeverageCard({ beverage, className }: BeverageCardProps) {
+/**
+ * Tarjeta individual para mostrar información de una bebida.
+ * Incluye imagen, detalles y botón para verificar disponibilidad.
+ */
+export function BeverageCard({ beverage, className, style }: BeverageCardProps) {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleModalToggle = () => setModalOpen(!isModalOpen);
 
   return (
-    <Card className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}>
+    <Card
+      className={`group flex flex-col h-full overflow-hidden rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-out border border-border/70 hover:border-primary/50 transform hover:-translate-y-1.5 hover:scale-[1.03] ${className}`}
+      style={style}
+    >
       <CardHeader className="p-0 relative">
         <div className="aspect-[4/3] w-full overflow-hidden bg-muted/30">
           <Image

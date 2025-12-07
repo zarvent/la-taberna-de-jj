@@ -49,7 +49,7 @@ const LocationSelectorComponent = () => {
   }, []);
 
   const MapLoadingPlaceholder = () => (
-    <div style={{ height: "100%", width: "100%", display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0' }} className="rounded-lg">
+    <div className="h-full w-full flex items-center justify-center bg-muted rounded-lg">
       <Loader2 className="h-10 w-10 text-primary animate-spin" />
       <p className="ml-2 text-muted-foreground">Cargando mapa interactivo...</p>
     </div>
